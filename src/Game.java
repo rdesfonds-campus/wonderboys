@@ -15,7 +15,7 @@ public class Game {
     public void start() {
         int choice = 0;
 
-        while (choice != 3) {
+        while (choice != 2) {
             menu.showMessage("Bienvenue dans Wonderboy !");
             menu.showMessage("1 - Nouveau personnage");
             menu.showMessage("2 - Quitter le jeu");
@@ -165,6 +165,24 @@ public class Game {
         }
 
         menu.showMessage("Bravo ! Tu es arrivé à la case " + board.getTotalSquares() + " !");
+        int endChoice = 0;
+
+// On demande au joueur ce qu'il veut faire maintenant
+        while (endChoice != 1 && endChoice != 2) {
+            menu.showMessage("Que veux-tu faire ?");
+            menu.showMessage("1 - Recommencer une partie");
+            menu.showMessage("2 - Retour au menu principal");
+            endChoice = menu.askInt("Ton choix : ");
+        }
+
+        if (endChoice == 1) {
+            // On relance une nouvelle partie (même personnage)
+            startGame();
+        } else {
+            // On ne fait rien : on retourne au menu principal (car startGame() se termine)
+            menu.showMessage("Retour au menu principal...");
+        }
+
     }
 
 }
