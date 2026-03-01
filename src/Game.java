@@ -15,21 +15,32 @@ public class Game {
     public void start() {
         int choice = 0;
 
-        while (choice != 2) {
+        while (choice != 3) {
             menu.showMessage("Bienvenue dans Wonderboy !");
             menu.showMessage("1 - Nouveau personnage");
             menu.showMessage("2 - Quitter le jeu");
+            menu.showMessage("3 - Démarrer la partie");
 
             choice = menu.askInt("Que veux-tu faire ?");
 
             if (choice == 1) {
                 menu.showMessage("On va créer un nouveau personnage !");
                 createCharacter();
+
             } else if (choice == 2) {
                 menu.showMessage("Au revoir !");
+
+            } else if (choice == 3) {
+                if (currentCharacter == null) {
+                    menu.showMessage("Tu dois créer un personnage avant de démarrer !");
+                } else {
+                    startGame();
+                }
+
             } else {
                 menu.showMessage("Choix invalide. Réessaie.");
             }
+
         }
     }
 
@@ -118,4 +129,43 @@ public class Game {
 
 
     }
+    private void startGame() {
+
+        // On crée le plateau (64 cases)
+        Board board = new Board();
+
+        // On crée un dé à 6 faces (par défaut)
+        Dice dice = new Dice();
+
+        // Au démarrage, le joueur est sur la case 1
+        int position = 1;
+
+        menu.showMessage("Début de la partie !");
+        menu.showMessage("Personnage : " + currentCharacter.getName());
+        menu.showMessage("Case " + position + " / " + board.getTotalSquares());
+
+        // Tant que tu n'es pas à la fin, tu rejoues un tour
+        while (position < board.getTotalSquares()) {
+
+            // Lancer le dé
+            int roll = dice.roll();
+
+            // Calculer la nouvelle position
+            int newPosition = position + roll;
+
+            // Si on dépasse 64, on s'arrête à 64
+            if (newPosition > board.getTotalSquares()) {
+                newPosition = board.getTotalSquares();
+            }
+
+            menu.showMessage("Tu lances le dé : " + roll);
+            menu.showMessage("Tu avances : " + position + " -> " + newPosition);
+
+            position = newPosition;
+        }
+
+        menu.showMessage("Bravo ! Tu es arrivé à la case " + board.getTotalSquares() + " !");
+    }
+
 }
+
