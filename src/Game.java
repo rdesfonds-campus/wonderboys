@@ -1,6 +1,7 @@
 public class Game {
     // Attribut : permet de discuter avec le joueur (afficher, poser des questions)
-    private Menu menu;
+    private final Menu menu;
+
 
     // Attribut : le personnage actuel du joueur (au début il sera vide)
     private Character currentCharacter;
@@ -23,23 +24,29 @@ public class Game {
 
             choice = menu.askInt("Que veux-tu faire ?");
 
-            if (choice == 1) {
-                menu.showMessage("On va créer un nouveau personnage !");
-                createCharacter();
+            switch (choice) {
+                case 1:
+                    menu.showMessage("On va créer un nouveau personnage !");
+                    createCharacter();
+                    break;
 
-            } else if (choice == 2) {
-                menu.showMessage("Au revoir !");
+                case 2:
+                    menu.showMessage("Au revoir !");
+                    break;
 
-            } else if (choice == 3) {
-                if (currentCharacter == null) {
-                    menu.showMessage("Tu dois créer un personnage avant de démarrer !");
-                } else {
-                    startGame();
-                }
+                case 3:
+                    if (currentCharacter == null) {
+                        menu.showMessage("Tu dois créer un personnage avant de démarrer !");
+                    } else {
+                        startGame();
+                    }
+                    break;
 
-            } else {
-                menu.showMessage("Choix invalide. Réessaie.");
+                default:
+                    menu.showMessage("Choix invalide. Réessaie.");
+                    break;
             }
+
 
         }
     }
@@ -111,21 +118,30 @@ public class Game {
 
             subChoice = menu.askInt("Ton choix : ");
 
-            if (subChoice == 1) {
-                menu.showMessage("Infos du personnage : " + currentCharacter);
-                menu.showMessage("Nom de l'arme : " + currentCharacter.getWeapon().getName());
-                menu.showMessage("Nom de la protection : " + currentCharacter.getDefense().getName());
+            switch (subChoice) {
+                case 1:
+                    menu.showMessage("Infos du personnage : " + currentCharacter);
+                    menu.showMessage("Nom de l'arme : " + currentCharacter.getWeapon().getName());
+                    menu.showMessage("Nom de la protection : " + currentCharacter.getDefense().getName());
+                    break;
 
-            } else if (subChoice == 2) {
-                String newName = menu.askString("Nouveau nom pour ton personnage : ");
-                currentCharacter.setName(newName);
-                menu.showMessage("Nouveau nom enregistré : " + currentCharacter.getName());
-            } else if (subChoice == 3) {
-                menu.showMessage("Retour au menu principal...");
-            } else {
-                menu.showMessage("Choix invalide dans le sous-menu.");
+                case 2:
+                    String newName = menu.askString("Nouveau nom pour ton personnage : ");
+                    currentCharacter.setName(newName);
+                    menu.showMessage("Nouveau nom enregistré : " + currentCharacter.getName());
+                    break;
+
+                case 3:
+                    menu.showMessage("Retour au menu principal...");
+                    break;
+
+                default:
+                    menu.showMessage("Choix invalide dans le sous-menu.");
+                    break;
             }
         }
+
+
 
 
     }
