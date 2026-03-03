@@ -1,3 +1,5 @@
+package fr.campus.wonderboys.game;
+
 public class Board {
 
     private int totalSquares;
@@ -12,6 +14,6 @@ public class Board {
 
     @Override
     public String toString() {
-        return "Board{totalSquares=" + totalSquares + "}";
+        return "fr.campus.wonderboys.game.Board{totalSquares=" + totalSquares + "}";
     }
 }

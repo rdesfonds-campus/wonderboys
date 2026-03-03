@@ -1,3 +1,5 @@
+import fr.campus.wonderboys.game.Dice;
+
 public class TestDice {
 
     // main = le point d'entrée pour lancer ce petit test

@@ -1,7 +1,9 @@
+package fr.campus.wonderboys.equipment;
+
 public class DefensiveEquipment {
 
     // Attributs : infos que l'objet garde en mémoire
-    private String type;        // ex : "Shield" ou "Potion"
+    private String type;        // ex : "fr.campus.wonderboys.equipment.Shield" ou "fr.campus.wonderboys.equipment.Potion"
     private int defenseLevel;   // niveau de défense
     private String name;        // nom de l'objet
 
@@ -41,7 +43,7 @@ public class DefensiveEquipment {
     // toString : permet d'afficher l'objet proprement en texte
     @Override
     public String toString() {
-        return "DefensiveEquipment{" +
+        return "fr.campus.wonderboys.equipment.DefensiveEquipment{" +
                 "type='" + type + '\'' +
                 ", defenseLevel=" + defenseLevel +
                 ", name='" + name + '\'' +

@@ -1,6 +1,8 @@
+package fr.campus.wonderboys.game;
+
 import java.util.Random;
 
-// La classe Dice représente un dé qui peut donner un nombre au hasard.
+// La classe fr.campus.wonderboys.game.Dice représente un dé qui peut donner un nombre au hasard.
 public class Dice {
     // sides = nombre de faces du dé (ex : 6 pour un dé classique)
     private int sides;
@@ -37,7 +39,7 @@ public class Dice {
     // toString : utile pour afficher facilement le dé (debug)
     @Override
     public String toString() {
-        return "Dice{sides=" + sides +"}";
+        return "fr.campus.wonderboys.game.Dice{sides=" + sides +"}";
     }
 }
 

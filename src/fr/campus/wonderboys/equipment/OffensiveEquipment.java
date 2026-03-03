@@ -1,3 +1,5 @@
+package fr.campus.wonderboys.equipment;
+
 public class OffensiveEquipment {
 
     // Attributs : infos que l'objet garde en mémoire
@@ -41,7 +43,7 @@ public class OffensiveEquipment {
 // toString : permet d'afficher l'objet proprement en texte
     @Override
     public String toString() {
-        return "OffensiveEquipment{" +
+        return "fr.campus.wonderboys.equipment.OffensiveEquipment{" +
                 "type='" + type + '\'' +
                 ", attackLevel=" + attackLevel +
                 ", name='" + name + '\'' +

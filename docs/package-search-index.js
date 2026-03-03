@@ -1,0 +1,1 @@
+packageSearchIndex = [{"l":"All Packages","u":"allpackages-index.html"},{"l":"fr.campus.wonderboys.characters"},{"l":"fr.campus.wonderboys.equipment"},{"l":"fr.campus.wonderboys.game"}];updateSearchResults();
