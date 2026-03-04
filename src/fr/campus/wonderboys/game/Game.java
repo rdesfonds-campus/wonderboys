@@ -209,6 +209,18 @@ public class Game {
 
     }
     /**
+     * Affiche le plateau de jeu (mini version 4 cases).
+     */
+    public void displayBoard() {
+        System.out.println("=== MINI-PLATEAU (4 cases) ===");
+        for (int i = 0; i < board.size(); i++) {
+            System.out.println("Case " + (i + 1) + " : " + board.get(i).toString());
+        }
+        System.out.println("Position joueur : " + playerPosition);
+        System.out.println("=========================");
+    }
+
+    /**
      * Lance partie plateau 64 cases avec dé.
      * Déplace currentCharacter jusqu'à fin ou OutOfBoardException.
      * Propose recommencer ou menu principal.
@@ -268,20 +280,31 @@ public class Game {
         }
 
     }
-    // Getter pour la position du joueur (placé après startGame, mais toujours dans la classe)
+
+    // Getter pour la position du joueur
     public int getPlayerPosition() {
         return playerPosition;
     }
-    /**
-     * Affiche le plateau de jeu avec les numéros de cases.
-     */
-    public void displayBoard() {
-        System.out.println("=== MINI-PLATEAU (4 cases) ===");
-        for (int i = 0; i < board.size(); i++) {
-            System.out.println("Case " + (i + 1) + " : " + board.get(i).toString());
-        }
-        System.out.println("Position joueur : " + playerPosition);
-        System.out.println("=========================");
+
+    // ====== NOUVELLES MÉTHODES POUR LE MINI-PLATEAU ======
+
+    private int rollDice() {
+        return 1;
     }
 
+    public void playTurnMiniBoard() {
+        System.out.println("\n--- NOUVEAU TOUR ---");
+        int diceResult = rollDice();
+        playerPosition += diceResult;
+
+        if (playerPosition > board.size()) {
+            System.out.println("Fin du mini-plateau !");
+            return;
+        }
+
+        System.out.println("Position joueur : " + playerPosition);
+        Cell currentCase = board.get(playerPosition - 1);
+        System.out.println("Tu es sur : " + currentCase.toString());
+        System.out.println("------------------");
+    }
 }
