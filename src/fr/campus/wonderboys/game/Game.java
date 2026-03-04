@@ -283,5 +283,42 @@ public class Game {
         System.out.println("Position joueur : " + playerPosition);
         System.out.println("=========================");
     }
+    /**
+     * Lance un dé pipé qui retourne toujours 1.
+     * Pour tester facilement le déplacement d'une case.
+     *
+     * @return toujours 1
+     */
+    private int rollDice() {
+        return 1;
+    }
+    /**
+     * Un tour de jeu sur le mini-plateau de 4 cases.
+     * Lance le dé (toujours 1), avance le joueur, affiche la case actuelle.
+     */
+    public void playTurnMiniBoard() {
+        System.out.println("\n--- NOUVEAU TOUR ---");
+
+        // Lancer le dé
+        int diceResult = rollDice();
+
+        // Avancer le joueur
+        playerPosition += diceResult;
+
+        // Vérifier qu'on ne dépasse pas le plateau
+        if (playerPosition > board.size()) {
+            System.out.println("🎉 Fin du mini-plateau !");
+            return;
+        }
+
+        // Afficher la nouvelle position
+        System.out.println("Position joueur : " + playerPosition);
+
+        // Afficher la case où il est tombé
+        Cell currentCase = board.get(playerPosition - 1); // -1 car ArrayList commence à 0
+        System.out.println("Tu es sur : " + currentCase.toString());
+
+        System.out.println("------------------");
+    }
 
 }
