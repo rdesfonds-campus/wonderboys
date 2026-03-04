@@ -5,6 +5,8 @@ import fr.campus.wonderboys.characters.Warrior;
 import fr.campus.wonderboys.characters.Wizard;
 import fr.campus.wonderboys.equipment.*;
 import fr.campus.wonderboys.game.OutOfBoardException;
+import java.util.ArrayList;
+import java.util.List;
 
 
 
@@ -17,15 +19,18 @@ import fr.campus.wonderboys.game.OutOfBoardException;
  * @version 1.0
  */
 public class Game {
+
     // Attribut : permet de discuter avec le joueur (afficher, poser des questions)
     private final Menu menu;
-
 
     // Attribut : le personnage actuel du joueur (au début il sera vide)
     private Character currentCharacter;
 
     // Position actuelle du joueur sur le plateau
     private int playerPosition;
+
+    // Le plateau de jeu (mini version 4 cases)
+    private List<Cell> board;
 
     // Constructeur : sert à créer une partie avec un menu
     /**
@@ -37,6 +42,12 @@ public class Game {
         this.menu = menu;
         this.currentCharacter = null; // pas de personnage au début
         this.playerPosition = 1;      // le joueur commence case 1
+   // Mini-plateau de test (4 cases)
+        this.board = new ArrayList<>();
+        board.add(new EmptyCell());
+        board.add(new EnemyCell());
+        board.add(new WeaponCell());
+        board.add(new PotionCell());
     }
 
 
@@ -260,6 +271,17 @@ public class Game {
     // Getter pour la position du joueur (placé après startGame, mais toujours dans la classe)
     public int getPlayerPosition() {
         return playerPosition;
+    }
+    /**
+     * Affiche le plateau de jeu avec les numéros de cases.
+     */
+    public void displayBoard() {
+        System.out.println("=== MINI-PLATEAU (4 cases) ===");
+        for (int i = 0; i < board.size(); i++) {
+            System.out.println("Case " + (i + 1) + " : " + board.get(i).toString());
+        }
+        System.out.println("Position joueur : " + playerPosition);
+        System.out.println("=========================");
     }
 
 }
