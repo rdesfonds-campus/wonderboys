@@ -11,5 +11,6 @@ public class Main {
 
         // Démarre le jeu
         game.start();
+
     }
 }
