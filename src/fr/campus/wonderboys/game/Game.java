@@ -24,6 +24,9 @@ public class Game {
     // Attribut : le personnage actuel du joueur (au début il sera vide)
     private Character currentCharacter;
 
+    // Position actuelle du joueur sur le plateau
+    private int playerPosition;
+
     // Constructeur : sert à créer une partie avec un menu
     /**
      * Crée une nouvelle partie avec menu d'interaction.
@@ -33,7 +36,9 @@ public class Game {
     public Game(Menu menu) {
         this.menu = menu;
         this.currentCharacter = null; // pas de personnage au début
+        this.playerPosition = 1;      // le joueur commence case 1
     }
+
 
     /**
      * Démarre le jeu avec boucle menu principal.
@@ -207,20 +212,18 @@ public class Game {
         Dice dice = new Dice();
 
         // Au démarrage, le joueur est sur la case 1
-        int position = 1;
+        playerPosition = 1;
 
         menu.showMessage("Début de la partie !");
         menu.showMessage("Personnage : " + currentCharacter.getName());
-        menu.showMessage("Case " + position + " / " + board.getTotalSquares());
+        menu.showMessage("Case " + playerPosition + " / " + board.getTotalSquares());
+
 
         // Tant que tu n'es pas à la fin, tu rejoues un tour
-        while (position < board.getTotalSquares()) {
+        while (playerPosition < board.getTotalSquares()) {
 
-            // Lancer le dé
             int roll = dice.roll();
-
-            // Calculer la nouvelle position
-            int newPosition = position + roll;
+            int newPosition = playerPosition + roll;
 
             if (newPosition > board.getTotalSquares()) {
                 throw new OutOfBoardException(
@@ -228,11 +231,10 @@ public class Game {
                 );
             }
 
-
             menu.showMessage("Tu lances le dé : " + roll);
-            menu.showMessage("Tu avances : " + position + " -> " + newPosition);
+            menu.showMessage("Tu avances : " + playerPosition + " -> " + newPosition);
 
-            position = newPosition;
+            playerPosition = newPosition;
         }
 
         menu.showMessage("Bravo ! Tu es arrivé à la case " + board.getTotalSquares() + " !");
@@ -254,6 +256,10 @@ public class Game {
             menu.showMessage("Retour au menu principal...");
         }
 
+    }
+    // Getter pour la position du joueur (placé après startGame, mais toujours dans la classe)
+    public int getPlayerPosition() {
+        return playerPosition;
     }
 
 }
