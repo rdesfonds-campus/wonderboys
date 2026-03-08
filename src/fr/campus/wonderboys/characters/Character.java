@@ -30,6 +30,7 @@ public abstract class Character {
     private int attackLevel;
     private OffensiveEquipment weapon;
     private DefensiveEquipment defense;
+    private int id;
 
     public Character(String type, String name, int lifeLevel, int attackLevel,
                      OffensiveEquipment weapon, DefensiveEquipment defense) {
@@ -47,6 +48,10 @@ public abstract class Character {
     public int getAttackLevel() { return attackLevel; }
     public OffensiveEquipment getWeapon() { return weapon; }
     public DefensiveEquipment getDefense() { return defense; }
+    public int getId() { return id; }
+    public void setId(int id) { this.id = id; }
+
+
 
     public void setType(String type) { this.type = type; }
     public void setName(String name) { this.name = name; }

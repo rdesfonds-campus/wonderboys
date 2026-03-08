@@ -60,11 +60,12 @@ public class Game {
 
         int choice = 0;
 
-        while (choice != 2) {
+        while (choice != 4) {
             menu.showMessage("Bienvenue dans Wonderboy !");
             menu.showMessage("1 - Nouveau personnage");
-            menu.showMessage("2 - Quitter le jeu");
+            menu.showMessage("2 - Modifier un personnage");
             menu.showMessage("3 - Démarrer la partie");
+            menu.showMessage("4 - Quitter le jeu");
 
             choice = menu.askInt("Que veux-tu faire ?");
 
@@ -75,7 +76,8 @@ public class Game {
                     break;
 
                 case 2:
-                    menu.showMessage("Au revoir !");
+                    // TODO : ici, plus tard, on mettra la modification via la BDD
+                    menu.showMessage("TODO : modifier un personnage existant (editHero)");
                     break;
 
                 case 3:
@@ -88,17 +90,20 @@ public class Game {
                             menu.showMessage("Erreur de plateau : " + e.getMessage());
                         }
                     }
+                    break;
 
+                case 4:
+                    menu.showMessage("Au revoir !");
                     break;
 
                 default:
                     menu.showMessage("Choix invalide. Réessaie.");
                     break;
             }
-
-
         }
     }
+
+
 
 
     /**
@@ -138,21 +143,22 @@ public class Game {
         menu.showMessage("Ton personnage s'appelle : " + name);
 
         OffensiveEquipment weapon;
-        if (type.equals("fr.campus.wonderboys.characters.Warrior")) {
-            weapon = new Weapon(3, "Épée rouillée");  // Weapon a déjà "Weapon" dedans
+        if (type.equals("Warrior")) {
+            weapon = new Weapon(3, "Épée rouillée");
         } else {
-            weapon = new OffensiveEquipment("fr.campus.wonderboys.equipment.Spell", 4, "Boule de feu");
+            weapon = new OffensiveEquipment("Spell", 4, "Boule de feu");
         }
 
         DefensiveEquipment defense;
-        if (type.equals("fr.campus.wonderboys.characters.Warrior")) {
+        if (type.equals("Warrior")) {
             defense = new Shield(2, "Petit bouclier en bois");
         } else {
             defense = new Potion(3, "Petite potion de soin");
         }
 
 
-        if (type.equals("fr.campus.wonderboys.characters.Warrior")) {
+
+        if (type.equals("Warrior")) {
             currentCharacter = new Warrior(
                     name,
                     lifeLevel,
@@ -169,6 +175,7 @@ public class Game {
                     defense
             );
         }
+
 
 
         int subChoice = 0;
@@ -206,6 +213,9 @@ public class Game {
 
 
 
+        // Enregistrer le personnage en base de données
+        fr.campus.wonderboys.db.HeroDAO heroDAO = new fr.campus.wonderboys.db.HeroDAO();
+        heroDAO.createHero(currentCharacter);
 
     }
     /**
