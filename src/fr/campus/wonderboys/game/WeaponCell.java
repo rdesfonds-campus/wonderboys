@@ -1,5 +1,7 @@
 package fr.campus.wonderboys.game;
 
+import fr.campus.wonderboys.characters.Character;  // ← AJOUTE CET IMPORT
+
 /**
  * Case contenant une arme à ramasser.
  *
@@ -11,7 +13,12 @@ package fr.campus.wonderboys.game;
 public class WeaponCell extends Cell {
 
     @Override
-    public String toString() {
+    public void interact(Character hero) {
+        System.out.println("Tu trouves une arme !");
+    }
+
+    @Override
+    public String toString() {  // ← AJOUTE CETTE MÉTHODE
         return "Case arme";
     }
 }

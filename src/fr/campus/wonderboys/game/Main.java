@@ -3,34 +3,36 @@ package fr.campus.wonderboys.game;
 import fr.campus.wonderboys.db.DatabaseConnection;
 import fr.campus.wonderboys.db.BoardCellData;
 import fr.campus.wonderboys.db.BoardCellDAO;
+import fr.campus.wonderboys.db.HeroDAO;
+import fr.campus.wonderboys.game.EmptyCell;
+import fr.campus.wonderboys.game.EnemyCell;
+import fr.campus.wonderboys.characters.Warrior;
+import fr.campus.wonderboys.characters.enemies.Goblin;
 import java.util.List;
-
 import java.sql.Connection;
-import java.sql.SQLException;import fr.campus.wonderboys.db.HeroDAO;
-
+import java.sql.SQLException;
 
 public class Main {
 
     public static void main(String[] args) {
+        // ... ton code existant (connexion BDD, BoardCellDAO, etc.) ...
 
-        // 1) Test de connexion à la base
-        System.out.println("Début du test de connexion...");
+        // Test rapide Goblin + interact (temporaire)
+        Warrior hero = new Warrior("TestHero", 10, 5, null, null);
 
-        try (Connection connection = DatabaseConnection.getConnection()) {
-            System.out.println("Connexion réussie à la base wonderboys !");
-        } catch (SQLException e) {
-            System.out.println("Erreur de connexion à la base :");
-            e.printStackTrace();
-        }
-        /*HeroDAO heroDAO = new HeroDAO();
-        fr.campus.wonderboys.characters.Character hero = heroDAO.getHeroById(1);
-        System.out.println(hero);*/
-        BoardCellDAO boardDao = new BoardCellDAO();
-        List<BoardCellData> cells = boardDao.loadBoardCells();
-        System.out.println(cells);
+        Goblin gobelin = new Goblin("Gobelin1", 5, 3, null, null);
+        System.out.println("=== TEST GOBLIN ===");
+        System.out.println(gobelin);
+        gobelin.onDefeated();
 
+        System.out.println("\n=== TEST CELLS ===");
+        EmptyCell empty = new EmptyCell();
+        empty.interact(hero);
 
-        // 2) Lancement normal du jeu
+        EnemyCell enemyCell = new EnemyCell();
+        enemyCell.interact(hero);
+
+        // Lancement du jeu
         Menu menu = new Menu();
         Game game = new Game(menu);
         game.start();

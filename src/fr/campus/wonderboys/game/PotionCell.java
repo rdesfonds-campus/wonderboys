@@ -1,4 +1,5 @@
 package fr.campus.wonderboys.game;
+import fr.campus.wonderboys.characters.Character;
 
 /**
  * Case contenant une potion de soin.
@@ -9,6 +10,12 @@ package fr.campus.wonderboys.game;
  * @version 1.0
  */
 public class PotionCell extends Cell {
+
+    @Override
+    public void interact(Character hero) {
+        System.out.println("Tu trouves une potion !");
+        // Plus tard : gain de vie
+    }
 
     @Override
     public String toString() {

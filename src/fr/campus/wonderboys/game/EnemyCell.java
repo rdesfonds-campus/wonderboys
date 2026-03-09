@@ -1,17 +1,17 @@
 package fr.campus.wonderboys.game;
 
-/**
- * Case contenant un ennemi sur le plateau.
- *
- * Le joueur devra combattre l'ennemi s'il tombe dessus.
- *
- * @author Romain D
- * @version 1.0
- */
+import fr.campus.wonderboys.characters.Character;
+
 public class EnemyCell extends Cell {
 
     @Override
-    public String toString() {
+    public void interact(Character hero) {
+        System.out.println("Un ennemi t'attaque !");
+        // Plus tard : combat
+    }
+
+    @Override
+    public String toString() {  // ← AJOUTE ÇA
         return "Case ennemi";
     }
 }
