@@ -112,17 +112,66 @@ public class Game {
         int lifeLevel;
         int attackLevel;
         String type;
+        String weaponName = null;
+        String defenseName = null;
 
         if (choiceType == 1) {
             type = "Warrior";
             lifeLevel = 10;
-            attackLevel = 5;
+            attackLevel = 10;
             menu.showMessage("Tu as choisi : Warrior");
+            // Choix de la nouvelle arme
+            menu.showMessage("Choisis une nouvelle arme :");
+            menu.showMessage("1 - Épée rouillée");
+            menu.showMessage("2 - Massue en bois");
+            int weaponChoice = menu.askInt("Ton choix d'arme : ");
+
+            if (weaponChoice == 1) {
+                weaponName = "Épée rouillée";
+            } else {
+                weaponName = "Massue en bois";
+            }
+
+            // Choix de la nouvelle défense
+            menu.showMessage("Choisis une nouvelle défense :");
+            menu.showMessage("1 - Petit bouclier en bois");
+            menu.showMessage("2 - Grande potion de soin");
+            int defenseChoice = menu.askInt("Ton choix de défense : ");
+
+            if (defenseChoice == 1) {
+                defenseName = "Petit bouclier en bois";
+            } else {
+                defenseName = "Grande potion de soin";
+            }
         } else {
             type = "Wizard";
             lifeLevel = 6;
             attackLevel = 8;
             menu.showMessage("Tu as choisi : Wizard");
+
+            // Choix de la nouvelle arme (sort)
+            menu.showMessage("Choisis un nouveau sort :");
+            menu.showMessage("1 - Bâton magique");
+            menu.showMessage("2 - Boule de feu");
+            int weaponChoice = menu.askInt("Ton choix de sort : ");
+
+            if (weaponChoice == 1) {
+                weaponName = "Bâton magique";
+            } else {
+                weaponName = "Boule de feu";
+            }
+
+            // Choix de la nouvelle défense (équipement magique / potion)
+            menu.showMessage("Choisis une nouvelle défense :");
+            menu.showMessage("1 - Petite potion de soin");
+            menu.showMessage("2 - Grande potion de soin");
+            int defenseChoice = menu.askInt("Ton choix de défense : ");
+
+            if (defenseChoice == 1) {
+                defenseName = "Petite potion de soin";
+            } else {
+                defenseName = "Grande potion de soin";
+            }
         }
 
         String name = menu.askString("Quel est le nom de ton personnage ?");
@@ -130,17 +179,18 @@ public class Game {
 
         OffensiveEquipment weapon;
         if (type.equals("Warrior")) {
-            weapon = new Weapon(3, "Épée rouillée");
+            weapon = new Weapon(3, weaponName);
         } else {
-            weapon = new OffensiveEquipment("Spell", 4, "Boule de feu");
+            weapon = new OffensiveEquipment("Spell", 4, weaponName);
         }
 
         DefensiveEquipment defense;
         if (type.equals("Warrior")) {
-            defense = new Shield(2, "Petit bouclier en bois");
+            defense = new Shield(2, defenseName);
         } else {
-            defense = new Potion(3, "Petite potion de soin");
+            defense = new Potion(3, defenseName);
         }
+
 
         if (type.equals("Warrior")) {
             currentCharacter = new Warrior(name, lifeLevel, attackLevel, weapon, defense);
@@ -197,55 +247,106 @@ public class Game {
 
         int idToEdit = menu.askInt("Quel Id de héros veux-tu modifier ?");
 
+        // On récupère le héros pour connaître son type
+        Character heroFromDb = heroDAO.getHeroById(idToEdit);
+        if (heroFromDb == null) {
+            menu.showMessage("Aucun héros trouvé avec cet Id.");
+            return;
+        }
+
+        // Nouveau nom (commun aux deux types)
         String newName = menu.askString("Quel nouveau nom veux-tu donner à ce héros ?");
 
-        // Choix de la nouvelle arme
-        menu.showMessage("Choisis une nouvelle arme :");
-        menu.showMessage("1 - Épée rouillée");
-        menu.showMessage("2 - Massue en bois");
-        int weaponChoice = menu.askInt("Ton choix d'arme : ");
-
         String weaponName;
-        if (weaponChoice == 1) {
-            weaponName = "Épée rouillée";
-        } else {
-            weaponName = "Massue en bois";
-        }
-
-        // Choix de la nouvelle défense
-        menu.showMessage("Choisis une nouvelle défense :");
-        menu.showMessage("1 - Petit bouclier en bois");
-        menu.showMessage("2 - Grande potion de soin");
-        int defenseChoice = menu.askInt("Ton choix de défense : ");
-
         String defenseName;
-        if (defenseChoice == 1) {
-            defenseName = "Petit bouclier en bois";
-        } else {
-            defenseName = "Grande potion de soin";
+
+        // Cas 1 : le héros est un Warrior
+        if (heroFromDb instanceof Warrior) {
+            // Choix de la nouvelle arme
+            menu.showMessage("Choisis une nouvelle arme :");
+            menu.showMessage("1 - Épée rouillée");
+            menu.showMessage("2 - Massue en bois");
+            int weaponChoice = menu.askInt("Ton choix d'arme : ");
+
+            if (weaponChoice == 1) {
+                weaponName = "Épée rouillée";
+            } else {
+                weaponName = "Massue en bois";
+            }
+
+            // Choix de la nouvelle défense
+            menu.showMessage("Choisis une nouvelle défense :");
+            menu.showMessage("1 - Petit bouclier en bois");
+            menu.showMessage("2 - Grande potion de soin");
+            int defenseChoice = menu.askInt("Ton choix de défense : ");
+
+            if (defenseChoice == 1) {
+                defenseName = "Petit bouclier en bois";
+            } else {
+                defenseName = "Grande potion de soin";
+            }
+
+            // Création d'un Warrior pour pousser les valeurs en BDD
+            Warrior heroToUpdate = new Warrior(
+                    newName,
+                    heroFromDb.getLifeLevel(),
+                    heroFromDb.getAttackLevel(),
+                    null,
+                    null
+            );
+            heroToUpdate.setId(idToEdit);
+            heroToUpdate.setWeapon(new Weapon(3, weaponName));
+            heroToUpdate.setDefense(new Shield(2, defenseName));
+
+            heroDAO.editHero(heroToUpdate);
+
+            // Cas 2 : le héros est un Wizard
+        } else if (heroFromDb instanceof Wizard) {
+            // Choix de la nouvelle arme (sort)
+            menu.showMessage("Choisis un nouveau sort :");
+            menu.showMessage("1 - Bâton magique");
+            menu.showMessage("2 - Boule de feu");
+            int weaponChoice = menu.askInt("Ton choix de sort : ");
+
+            if (weaponChoice == 1) {
+                weaponName = "Bâton magique";
+            } else {
+                weaponName = "Boule de feu";
+            }
+
+            // Choix de la nouvelle défense (équipement magique / potion)
+            menu.showMessage("Choisis une nouvelle défense :");
+            menu.showMessage("1 - Petite potion de soin");
+            menu.showMessage("2 - Grande potion de soin");
+            int defenseChoice = menu.askInt("Ton choix de défense : ");
+
+            if (defenseChoice == 1) {
+                defenseName = "Petite potion de soin";
+            } else {
+                defenseName = "Grande potion de soin";
+            }
+
+            // Création d'un Wizard pour pousser les valeurs en BDD
+            Wizard heroToUpdate = new Wizard(
+                    newName,
+                    heroFromDb.getLifeLevel(),
+                    heroFromDb.getAttackLevel(),
+                    null,
+                    null
+            );
+            heroToUpdate.setId(idToEdit);
+            // Ici tu peux utiliser OffensiveEquipment / DefensiveEquipment adaptés aux wizards
+            heroToUpdate.setWeapon(new OffensiveEquipment("Spell", 4, weaponName));
+            heroToUpdate.setDefense(new Potion(3, defenseName));
+
+            heroDAO.editHero(heroToUpdate);
         }
-
-        // Création d'un Warrior "bidon" pour pousser les valeurs en BDD
-        Warrior heroToUpdate = new Warrior(
-                newName,   // nouveau nom
-                10,        // lifePoints par défaut
-                5,         // strength par défaut
-                null,
-                null
-        );
-        heroToUpdate.setId(idToEdit);
-
-        // on crée l'arme et la défense avec les noms choisis
-        heroToUpdate.setWeapon(new Weapon(3, weaponName));
-        heroToUpdate.setDefense(new Shield(2, defenseName));
-
-        heroDAO.editHero(heroToUpdate);
 
         menu.showMessage("Modification envoyée en base pour l'Id " + idToEdit +
-                " avec le nom : " + newName +
-                ", arme : " + weaponName +
-                ", défense : " + defenseName);
+                " avec le nom : " + newName);
     }
+
+
 
     /**
      * Choisir un héros existant en BDD pour jouer.
@@ -317,6 +418,13 @@ public class Game {
         }
 
         menu.showMessage("Bravo ! Tu es arrivé à la case " + board.getTotalSquares() + " !");
+        HeroDAO heroDAO = new HeroDAO();
+        heroDAO.changeLifePointsCharacter(
+                currentCharacter.getId(),
+                currentCharacter.getLifeLevel()
+        );
+
+
         int endChoice = 0;
 
         while (endChoice != 1 && endChoice != 2) {

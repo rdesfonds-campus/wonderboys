@@ -140,6 +140,31 @@ public class HeroDAO {
 
         return null;
     }
+    /**
+     * Met à jour les points de vie d'un héros en base.
+     */
+    public void changeLifePointsCharacter(int id, int newLifePoints) {
+        String sql = "UPDATE `Character` SET LifePoints = ? WHERE Id = ?";
+
+        try (Connection connection = DatabaseConnection.getConnection();
+             java.sql.PreparedStatement statement = connection.prepareStatement(sql)) {
+
+            statement.setInt(1, newLifePoints);
+            statement.setInt(2, id);
+
+            int rows = statement.executeUpdate();
+            if (rows > 0) {
+                System.out.println("Points de vie mis à jour pour le héros Id " + id +
+                        " : " + newLifePoints);
+            } else {
+                System.out.println("Aucun héros trouvé pour l'Id " + id);
+            }
+
+        } catch (SQLException e) {
+            System.out.println("Erreur lors de la mise à jour des points de vie :");
+            e.printStackTrace();
+        }
+    }
 
 
 

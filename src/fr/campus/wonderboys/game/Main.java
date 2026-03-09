@@ -18,9 +18,9 @@ public class Main {
             System.out.println("Erreur de connexion à la base :");
             e.printStackTrace();
         }
-        HeroDAO heroDAO = new HeroDAO();
-        fr.campus.wonderboys.characters.Character hero = heroDAO.getHeroById(3);
-        System.out.println(hero);
+        /*HeroDAO heroDAO = new HeroDAO();
+        fr.campus.wonderboys.characters.Character hero = heroDAO.getHeroById(1);
+        System.out.println(hero);*/
 
 
         // 2) Lancement normal du jeu
