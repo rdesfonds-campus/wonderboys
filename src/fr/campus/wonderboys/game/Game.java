@@ -3,46 +3,35 @@ package fr.campus.wonderboys.game;
 import fr.campus.wonderboys.characters.Character;
 import fr.campus.wonderboys.characters.Warrior;
 import fr.campus.wonderboys.characters.Wizard;
+import fr.campus.wonderboys.db.HeroDAO;
 import fr.campus.wonderboys.equipment.*;
-import fr.campus.wonderboys.game.OutOfBoardException;
 import java.util.ArrayList;
 import java.util.List;
-
-
-
 
 /**
  * Gère une partie complète de Wonderboys avec menu et personnages.
  * Lance le menu principal, crée guerrier/magicien, déplace sur plateau 64 cases.
- *
- * @author Romain D
- * @version 1.0
  */
 public class Game {
 
-    // Attribut : permet de discuter avec le joueur (afficher, poser des questions)
+    // Pour discuter avec le joueur
     private final Menu menu;
 
-    // Attribut : le personnage actuel du joueur (au début il sera vide)
+    // Personnage actuel du joueur
     private Character currentCharacter;
 
-    // Position actuelle du joueur sur le plateau
+    // Position actuelle sur le plateau
     private int playerPosition;
 
-    // Le plateau de jeu (mini version 4 cases)
+    // Mini-plateau de test (4 cases)
     private List<Cell> board;
 
-    // Constructeur : sert à créer une partie avec un menu
-    /**
-     * Crée une nouvelle partie avec menu d'interaction.
-     *
-     * @param menu objet Menu pour afficher messages et poser questions joueur
-     */
     public Game(Menu menu) {
         this.menu = menu;
-        this.currentCharacter = null; // pas de personnage au début
-        this.playerPosition = 1;      // le joueur commence case 1
-   // Mini-plateau de test (4 cases)
+        this.currentCharacter = null;
+        this.playerPosition = 1;
+
+        // Mini-plateau pour les tests
         this.board = new ArrayList<>();
         board.add(new EmptyCell());
         board.add(new EnemyCell());
@@ -50,22 +39,20 @@ public class Game {
         board.add(new PotionCell());
     }
 
-
     /**
      * Démarre le jeu avec boucle menu principal.
-     * Propose : créer perso, lancer partie, quitter.
-     * Appelle createCharacter() ou startGame().
      */
     public void start() {
 
         int choice = 0;
 
-        while (choice != 4) {
+        while (choice != 5) {
             menu.showMessage("Bienvenue dans Wonderboy !");
             menu.showMessage("1 - Nouveau personnage");
-            menu.showMessage("2 - Modifier un personnage");
-            menu.showMessage("3 - Démarrer la partie");
-            menu.showMessage("4 - Quitter le jeu");
+            menu.showMessage("2 - Choisir un héros existant");
+            menu.showMessage("3 - Modifier un personnage");
+            menu.showMessage("4 - Démarrer la partie");
+            menu.showMessage("5 - Quitter le jeu");
 
             choice = menu.askInt("Que veux-tu faire ?");
 
@@ -76,13 +63,16 @@ public class Game {
                     break;
 
                 case 2:
-                    // TODO : ici, plus tard, on mettra la modification via la BDD
-                    menu.showMessage("TODO : modifier un personnage existant (editHero)");
+                    chooseExistingHero();
                     break;
 
                 case 3:
+                    editExistingHero();
+                    break;
+
+                case 4:
                     if (currentCharacter == null) {
-                        menu.showMessage("Tu dois créer un personnage avant de démarrer !");
+                        menu.showMessage("Tu dois créer ou choisir un personnage avant de démarrer !");
                     } else {
                         try {
                             startGame();
@@ -92,7 +82,7 @@ public class Game {
                     }
                     break;
 
-                case 4:
+                case 5:
                     menu.showMessage("Au revoir !");
                     break;
 
@@ -103,13 +93,9 @@ public class Game {
         }
     }
 
-
-
-
     /**
-     * Crée Warrior ou Wizard selon choix joueur (1/2).
-     * Demande nom, crée arme/défense, sous-menu infos/modif.
-     * Stocke dans currentCharacter.
+     * Crée Warrior ou Wizard selon choix joueur.
+     * Enregistre le personnage en BDD.
      */
     private void createCharacter() {
         menu.showMessage("Choisis ton type de personnage :");
@@ -156,27 +142,11 @@ public class Game {
             defense = new Potion(3, "Petite potion de soin");
         }
 
-
-
         if (type.equals("Warrior")) {
-            currentCharacter = new Warrior(
-                    name,
-                    lifeLevel,
-                    attackLevel,
-                    weapon,
-                    defense
-            );
+            currentCharacter = new Warrior(name, lifeLevel, attackLevel, weapon, defense);
         } else {
-            currentCharacter = new Wizard(
-                    name,
-                    lifeLevel,
-                    attackLevel,
-                    weapon,
-                    defense
-            );
+            currentCharacter = new Wizard(name, lifeLevel, attackLevel, weapon, defense);
         }
-
-
 
         int subChoice = 0;
 
@@ -211,15 +181,95 @@ public class Game {
             }
         }
 
-
-
         // Enregistrer le personnage en base de données
-        fr.campus.wonderboys.db.HeroDAO heroDAO = new fr.campus.wonderboys.db.HeroDAO();
+        HeroDAO heroDAO = new HeroDAO();
         heroDAO.createHero(currentCharacter);
-
     }
+
     /**
-     * Affiche le plateau de jeu (mini version 4 cases).
+     * Modifie un héros existant en BDD (nom + équipement).
+     */
+    private void editExistingHero() {
+        menu.showMessage("Liste des héros en base :");
+
+        HeroDAO heroDAO = new HeroDAO();
+        heroDAO.getHeroes();   // affiche les héros en console
+
+        int idToEdit = menu.askInt("Quel Id de héros veux-tu modifier ?");
+
+        String newName = menu.askString("Quel nouveau nom veux-tu donner à ce héros ?");
+
+        // Choix de la nouvelle arme
+        menu.showMessage("Choisis une nouvelle arme :");
+        menu.showMessage("1 - Épée rouillée");
+        menu.showMessage("2 - Massue en bois");
+        int weaponChoice = menu.askInt("Ton choix d'arme : ");
+
+        String weaponName;
+        if (weaponChoice == 1) {
+            weaponName = "Épée rouillée";
+        } else {
+            weaponName = "Massue en bois";
+        }
+
+        // Choix de la nouvelle défense
+        menu.showMessage("Choisis une nouvelle défense :");
+        menu.showMessage("1 - Petit bouclier en bois");
+        menu.showMessage("2 - Grande potion de soin");
+        int defenseChoice = menu.askInt("Ton choix de défense : ");
+
+        String defenseName;
+        if (defenseChoice == 1) {
+            defenseName = "Petit bouclier en bois";
+        } else {
+            defenseName = "Grande potion de soin";
+        }
+
+        // Création d'un Warrior "bidon" pour pousser les valeurs en BDD
+        Warrior heroToUpdate = new Warrior(
+                newName,   // nouveau nom
+                10,        // lifePoints par défaut
+                5,         // strength par défaut
+                null,
+                null
+        );
+        heroToUpdate.setId(idToEdit);
+
+        // on crée l'arme et la défense avec les noms choisis
+        heroToUpdate.setWeapon(new Weapon(3, weaponName));
+        heroToUpdate.setDefense(new Shield(2, defenseName));
+
+        heroDAO.editHero(heroToUpdate);
+
+        menu.showMessage("Modification envoyée en base pour l'Id " + idToEdit +
+                " avec le nom : " + newName +
+                ", arme : " + weaponName +
+                ", défense : " + defenseName);
+    }
+
+    /**
+     * Choisir un héros existant en BDD pour jouer.
+     */
+    private void chooseExistingHero() {
+        HeroDAO heroDAO = new HeroDAO();
+
+        menu.showMessage("Liste des héros disponibles :");
+        heroDAO.getHeroes();
+
+        int idToUse = menu.askInt("Quel Id de héros veux-tu utiliser pour jouer ?");
+
+        Character hero = heroDAO.getHeroById(idToUse);
+
+        if (hero == null) {
+            menu.showMessage("Aucun héros trouvé avec cet Id.");
+        } else {
+            currentCharacter = hero;
+            menu.showMessage("Tu joueras maintenant avec : " + currentCharacter.getName());
+        }
+    }
+
+    /**
+     * Affiche le mini-plateau de test.
      */
     public void displayBoard() {
         System.out.println("=== MINI-PLATEAU (4 cases) ===");
@@ -231,10 +281,7 @@ public class Game {
     }
 
     /**
-     * Lance partie plateau 64 cases avec dé.
-     * Déplace currentCharacter jusqu'à fin ou OutOfBoardException.
-     * Propose recommencer ou menu principal.
-     * @throws OutOfBoardException si position > 64
+     * Lance la vraie partie plateau 64 cases avec dé.
      */
     private void startGame() throws OutOfBoardException {
 
@@ -250,7 +297,6 @@ public class Game {
         menu.showMessage("Début de la partie !");
         menu.showMessage("Personnage : " + currentCharacter.getName());
         menu.showMessage("Case " + playerPosition + " / " + board.getTotalSquares());
-
 
         // Tant que tu n'es pas à la fin, tu rejoues un tour
         while (playerPosition < board.getTotalSquares()) {
@@ -273,7 +319,6 @@ public class Game {
         menu.showMessage("Bravo ! Tu es arrivé à la case " + board.getTotalSquares() + " !");
         int endChoice = 0;
 
-// On demande au joueur ce qu'il veut faire maintenant
         while (endChoice != 1 && endChoice != 2) {
             menu.showMessage("Que veux-tu faire ?");
             menu.showMessage("1 - Recommencer une partie");
@@ -282,21 +327,17 @@ public class Game {
         }
 
         if (endChoice == 1) {
-            // On relance une nouvelle partie (même personnage)
             startGame();
         } else {
-            // On ne fait rien : on retourne au menu principal (car startGame() se termine)
             menu.showMessage("Retour au menu principal...");
         }
-
     }
 
-    // Getter pour la position du joueur
     public int getPlayerPosition() {
         return playerPosition;
     }
 
-    // ====== NOUVELLES MÉTHODES POUR LE MINI-PLATEAU ======
+    // ====== MINI-PLATEAU ======
 
     private int rollDice() {
         return 1;

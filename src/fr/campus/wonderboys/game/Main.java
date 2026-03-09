@@ -19,7 +19,9 @@ public class Main {
             e.printStackTrace();
         }
         HeroDAO heroDAO = new HeroDAO();
-        heroDAO.getHeroes();
+        fr.campus.wonderboys.characters.Character hero = heroDAO.getHeroById(3);
+        System.out.println(hero);
+
 
         // 2) Lancement normal du jeu
         Menu menu = new Menu();

@@ -4,6 +4,9 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import fr.campus.wonderboys.characters.Warrior;
+import fr.campus.wonderboys.characters.Wizard;
+import fr.campus.wonderboys.equipment.*;
 
 public class HeroDAO {
 
@@ -91,6 +94,53 @@ public class HeroDAO {
             e.printStackTrace();
         }
     }
+    public fr.campus.wonderboys.characters.Character getHeroById(int id) {
+        String sql = "SELECT * FROM `Character` WHERE Id = ?";
+
+        try (Connection connection = DatabaseConnection.getConnection();
+             java.sql.PreparedStatement statement = connection.prepareStatement(sql)) {
+
+            statement.setInt(1, id);
+
+            try (ResultSet resultSet = statement.executeQuery()) {
+                if (resultSet.next()) {
+                    String type = resultSet.getString("Type");
+                    String name = resultSet.getString("Name");
+                    int lifePoints = resultSet.getInt("LifePoints");
+                    int strength = resultSet.getInt("Strength");
+                    String offensive = resultSet.getString("OffensiveEquipment");
+                    String defensive = resultSet.getString("DefensiveEquipment");
+
+                    OffensiveEquipment weapon = null;
+                    DefensiveEquipment defense = null;
+
+                    if (offensive != null) {
+                        weapon = new Weapon(strength, offensive);
+                    }
+                    if (defensive != null) {
+                        defense = new Shield(2, defensive);
+                    }
+
+                    if ("Warrior".equalsIgnoreCase(type)) {
+                        Warrior warrior = new Warrior(name, lifePoints, strength, weapon, defense);
+                        warrior.setId(id);
+                        return warrior;
+                    } else if ("Wizard".equalsIgnoreCase(type)) {
+                        Wizard wizard = new Wizard(name, lifePoints, strength, weapon, defense);
+                        wizard.setId(id);
+                        return wizard;
+                    }
+                }
+            }
+
+        } catch (SQLException e) {
+            System.out.println("Erreur lors de la récupération du héros par Id :");
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
 
 
 }
