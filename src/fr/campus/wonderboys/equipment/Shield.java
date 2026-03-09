@@ -1,13 +1,20 @@
 package fr.campus.wonderboys.equipment;
 
+import fr.campus.wonderboys.characters.Character;
+
 public class Shield extends DefensiveEquipment {
 
-    public Shield(int defenseLevel, String name) {
-        super("fr.campus.wonderboys.equipment.Shield", defenseLevel, name);
+    public Shield() {
+        super("Bouclier", 2, "shield");  // ← AJOUTE ÇA
+    }
+
+    @Override
+    public void use(Character hero) {
+        System.out.println("Bouclier activé !");
     }
 
     @Override
     public String toString() {
-        return "fr.campus.wonderboys.equipment.Shield : " + getName() + " (Défense : " + getDefenseLevel() + ")";
+        return "Bouclier (défense: 2)";
     }
 }

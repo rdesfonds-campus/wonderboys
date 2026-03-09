@@ -1,5 +1,6 @@
 package fr.campus.wonderboys.characters;
 
+import fr.campus.wonderboys.equipment.FragmentPuissance;
 import fr.campus.wonderboys.equipment.OffensiveEquipment;
 import fr.campus.wonderboys.equipment.DefensiveEquipment;
 
@@ -74,4 +75,17 @@ public abstract class Character {
                 ", defense='" + defenseName + '\'' +
                 '}';
     }
+
+    public void setOffensiveEquipment(FragmentPuissance fragmentPuissance) {
+    }
+    private int maxLifeLevel = 20; // Au début avec les autres private
+
+    public int getMaxLifeLevel() {
+        return maxLifeLevel;
+    }
+
+    public void setMaxLifeLevel(int max) {
+        this.maxLifeLevel = max;
+    }
+
 }

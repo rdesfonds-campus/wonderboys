@@ -1,6 +1,8 @@
 package fr.campus.wonderboys.equipment;
 
-public class DefensiveEquipment {
+import fr.campus.wonderboys.characters.Character;
+
+public abstract class DefensiveEquipment {
 
     // Attributs : infos que l'objet garde en mémoire
     private String type;        // ex : "fr.campus.wonderboys.equipment.Shield" ou "fr.campus.wonderboys.equipment.Potion"
@@ -39,6 +41,8 @@ public class DefensiveEquipment {
     public void setName(String name) {
         this.name = name;
     }
+
+    public abstract void use(Character hero);
 
     // toString : permet d'afficher l'objet proprement en texte
     @Override

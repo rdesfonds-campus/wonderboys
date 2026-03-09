@@ -118,7 +118,7 @@ public class HeroDAO {
                         weapon = new Weapon(strength, offensive);
                     }
                     if (defensive != null) {
-                        defense = new Shield(2, defensive);
+                        defense = new Shield();
                     }
 
                     if ("Warrior".equalsIgnoreCase(type)) {

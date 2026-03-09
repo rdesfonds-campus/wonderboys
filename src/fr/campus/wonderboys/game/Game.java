@@ -186,7 +186,7 @@ public class Game {
 
         DefensiveEquipment defense;
         if (type.equals("Warrior")) {
-            defense = new Shield(2, defenseName);
+            defense = new Shield();
         } else {
             defense = new Potion(3, defenseName);
         }
@@ -296,7 +296,7 @@ public class Game {
             );
             heroToUpdate.setId(idToEdit);
             heroToUpdate.setWeapon(new Weapon(3, weaponName));
-            heroToUpdate.setDefense(new Shield(2, defenseName));
+            heroToUpdate.setDefense(new Shield());
 
             heroDAO.editHero(heroToUpdate);
 

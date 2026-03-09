@@ -1,13 +1,20 @@
 package fr.campus.wonderboys.equipment;
 
+import fr.campus.wonderboys.characters.Character;  // ← AJOUTE ÇA
+
 public class Potion extends DefensiveEquipment {
 
     public Potion(int defenseLevel, String name) {
-        super("fr.campus.wonderboys.equipment.Potion", defenseLevel, name);
+        super("Potion", defenseLevel, name);  // ← "Potion" au lieu du package
+    }
+
+    @Override
+    public void use(Character hero) {
+        System.out.println("Potion utilisée ! +" + getDefenseLevel() + " PV");
     }
 
     @Override
     public String toString() {
-        return "fr.campus.wonderboys.equipment.Potion : " + getName() + " (Défense : " + getDefenseLevel() + ")";
+        return "Potion(" + getDefenseLevel() + ")";
     }
 }

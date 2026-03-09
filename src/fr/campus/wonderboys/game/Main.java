@@ -5,6 +5,7 @@ import fr.campus.wonderboys.db.DatabaseConnection;
 import fr.campus.wonderboys.db.BoardCellData;
 import fr.campus.wonderboys.db.BoardCellDAO;
 import fr.campus.wonderboys.db.HeroDAO;
+import fr.campus.wonderboys.equipment.*;
 import fr.campus.wonderboys.game.EmptyCell;
 import fr.campus.wonderboys.game.EnemyCell;
 import fr.campus.wonderboys.characters.Warrior;
@@ -53,6 +54,46 @@ public class Main {
         Dragon dragon = new Dragon();
         System.out.println(dragon);
         System.out.println("Dragon attaque: " + dragon.calculateDamage());
+/*
+        System.out.println("\n=== TEST FRAGMENT ===");
+        Warrior hero2 = new Warrior("Test", 10, 3, null, null);
+        FragmentPuissance frag = new FragmentPuissance();
+        hero2.setOffensiveEquipment(frag); // Équipe manuellement pour test
+        System.out.println("Équipement: " + hero2.getOffensiveEquipment());
+        System.out.println("Dégâts boost: " + hero2.getOffensiveEquipment().getAttackLevel());
+*/
+        System.out.println("\n=== TEST SUPERSOINS ===");
+        Warrior hero3 = new Warrior("Thor", 5, 3, null, null); // PV bas pour tester
+        SuperSoin superSoin = new SuperSoin();
+        superSoin.use(hero3);
+        System.out.println("PV après Super Soin: " + hero3.getLifeLevel());
+
+        System.out.println("\n=== TEST AMULETTE ===");
+        AmuletteProtection amu = new AmuletteProtection();
+        System.out.println(amu);
+        amu.use(hero); // ou hero4 si tu préfères
+
+        // Dans Main.java après Amulette
+        System.out.println("\n=== TEST BAZOOKA ===");
+        Bazooka baz = new Bazooka();
+        baz.testUse(); // Appel la méthode test
+        System.out.println(baz);
+
+        System.out.println("\n=== TEST SORT ULTIMA ===");
+        SortUltima ultima = new SortUltima();
+        ultima.testUse();
+        System.out.println(ultima);
+
+        System.out.println("\n=== TEST LAME VORPALE ===");
+        LameVorpale lame = new LameVorpale();
+        lame.testUse();
+        System.out.println(lame);
+
+        System.out.println("\n=== TEST ÉTOILE MARIO ===");
+        EtoileMario etoile = new EtoileMario();
+        etoile.use(null); // Test sans hero
+        System.out.println(etoile);
+
 
 
         // Lancement du jeu
