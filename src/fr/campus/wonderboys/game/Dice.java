@@ -19,7 +19,7 @@ public class Dice {
 
     // Constructeur avec paramètre, on peut choisir le nombre de faces.
     public Dice (int sides) {
-        this.sides = 6;
+        this.sides = sides;
         this.random = new Random ();
     }
 

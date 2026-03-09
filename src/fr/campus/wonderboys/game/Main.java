@@ -27,8 +27,8 @@ public class Main {
         EmptyCell empty = new EmptyCell();
         empty.interact(hero);
         System.out.println("\n=== TEST NOUVEAUX MONSTRES ===");
-        Serpent serpent = new Serpent();
-        System.out.println(serpent);
+        Serpent serp = new Serpent();
+        System.out.println(serp);
 
         Champignon champi = new Champignon();
         System.out.println(champi);
@@ -39,8 +39,20 @@ public class Main {
         EnemyCell enemyCell = new EnemyCell();
         enemyCell.interact(hero);
 
+        Chevalier chev = new Chevalier();
+        System.out.println(chev);
+
+        System.out.println("\n=== TEST DÉGÂTS VARIABLES ===");
+        Serpent serpent = new Serpent();
+        for (int i = 0; i < 5; i++) {
+            System.out.println("Serpent attaque: " + serpent.calculateDamage());
+        }
+
         Chevalier cheval = new Chevalier();
-        System.out.println(cheval);
+        for (int i = 0; i < 5; i++) {
+            System.out.println("Chevalier attaque: " + cheval.calculateDamage());
+        }
+
 
         // Lancement du jeu
         Menu menu = new Menu();
