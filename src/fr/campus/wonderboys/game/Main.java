@@ -1,8 +1,6 @@
 package fr.campus.wonderboys.game;
 
-import fr.campus.wonderboys.characters.enemies.Champignon;
-import fr.campus.wonderboys.characters.enemies.Chevalier;
-import fr.campus.wonderboys.characters.enemies.Serpent;
+import fr.campus.wonderboys.characters.enemies.*;
 import fr.campus.wonderboys.db.DatabaseConnection;
 import fr.campus.wonderboys.db.BoardCellData;
 import fr.campus.wonderboys.db.BoardCellDAO;
@@ -10,7 +8,7 @@ import fr.campus.wonderboys.db.HeroDAO;
 import fr.campus.wonderboys.game.EmptyCell;
 import fr.campus.wonderboys.game.EnemyCell;
 import fr.campus.wonderboys.characters.Warrior;
-import fr.campus.wonderboys.characters.enemies.Goblin;
+
 import java.util.List;
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -52,6 +50,9 @@ public class Main {
         for (int i = 0; i < 5; i++) {
             System.out.println("Chevalier attaque: " + cheval.calculateDamage());
         }
+        Dragon dragon = new Dragon();
+        System.out.println(dragon);
+        System.out.println("Dragon attaque: " + dragon.calculateDamage());
 
 
         // Lancement du jeu
