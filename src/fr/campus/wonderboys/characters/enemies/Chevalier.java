@@ -3,14 +3,14 @@ package fr.campus.wonderboys.characters.enemies;
 import fr.campus.wonderboys.equipment.OffensiveEquipment;
 import fr.campus.wonderboys.equipment.DefensiveEquipment;
 
-public class Goblin extends Enemy {
+public class Chevalier extends Enemy {
 
-    public Goblin() {
-        super("Gobelin", 8, 4, (OffensiveEquipment) null, (DefensiveEquipment) null);
+    public Chevalier() {
+        super("Chevalier", 12, 6, (OffensiveEquipment) null, (DefensiveEquipment) null);
     }
 
     @Override
     public String toString() {
-        return "Gobelin (PV: " + getLifeLevel() + ", dégâts: 1d4)";
+        return "Chevalier (PV: " + getLifeLevel() + ", dégâts: 1d6)";
     }
 }

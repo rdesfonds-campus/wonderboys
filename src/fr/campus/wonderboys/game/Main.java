@@ -1,5 +1,8 @@
 package fr.campus.wonderboys.game;
 
+import fr.campus.wonderboys.characters.enemies.Champignon;
+import fr.campus.wonderboys.characters.enemies.Chevalier;
+import fr.campus.wonderboys.characters.enemies.Serpent;
 import fr.campus.wonderboys.db.DatabaseConnection;
 import fr.campus.wonderboys.db.BoardCellData;
 import fr.campus.wonderboys.db.BoardCellDAO;
@@ -20,17 +23,24 @@ public class Main {
         // Test rapide Goblin + interact (temporaire)
         Warrior hero = new Warrior("TestHero", 10, 5, null, null);
 
-        Goblin gobelin = new Goblin("Gobelin1", 5, 3, null, null);
-        System.out.println("=== TEST GOBLIN ===");
-        System.out.println(gobelin);
-        gobelin.onDefeated();
-
         System.out.println("\n=== TEST CELLS ===");
         EmptyCell empty = new EmptyCell();
         empty.interact(hero);
+        System.out.println("\n=== TEST NOUVEAUX MONSTRES ===");
+        Serpent serpent = new Serpent();
+        System.out.println(serpent);
+
+        Champignon champi = new Champignon();
+        System.out.println(champi);
+
+        Goblin gob = new Goblin();
+        System.out.println(gob);
 
         EnemyCell enemyCell = new EnemyCell();
         enemyCell.interact(hero);
+
+        Chevalier cheval = new Chevalier();
+        System.out.println(cheval);
 
         // Lancement du jeu
         Menu menu = new Menu();
