@@ -1,18 +1,9 @@
 package fr.campus.wonderboys.game;
 
 import fr.campus.wonderboys.characters.enemies.*;
-import fr.campus.wonderboys.db.DatabaseConnection;
-import fr.campus.wonderboys.db.BoardCellData;
-import fr.campus.wonderboys.db.BoardCellDAO;
-import fr.campus.wonderboys.db.HeroDAO;
 import fr.campus.wonderboys.equipment.*;
-import fr.campus.wonderboys.game.EmptyCell;
-import fr.campus.wonderboys.game.EnemyCell;
 import fr.campus.wonderboys.characters.Warrior;
-
-import java.util.List;
-import java.sql.Connection;
-import java.sql.SQLException;
+import fr.campus.wonderboys.pieges.*;
 
 public class Main {
 
@@ -94,6 +85,31 @@ public class Main {
         etoile.use(null); // Test sans hero
         System.out.println(etoile);
 
+        System.out.println("\n=== TEST PIÈGE TROU ===");
+        Warrior hero5 = new Warrior("Test", 10, 3, null, null);
+        Trou trou = new Trou();
+        trou.interact(hero5);
+        System.out.println(trou);
+
+        System.out.println("\n=== TEST PIÈGE MINE ===");
+        Mine mine = new Mine();
+        mine.interact(hero5);
+        System.out.println(mine);
+
+        System.out.println("\n=== TEST PIÈGE POISON ===");
+        NuagePoison poison = new NuagePoison();
+        poison.interact(hero5);
+        System.out.println(poison);
+
+        System.out.println("\n=== TEST PIÈGE ÉBOULEMENT ===");
+        Eboulement eboule = new Eboulement();
+        eboule.interact(hero5);
+        System.out.println(eboule);
+
+        System.out.println("\n=== TEST PIÈGE FLAMMES ===");
+        Flammes flammes = new Flammes();
+        flammes.interact(hero5);
+        System.out.println(flammes);
 
 
         // Lancement du jeu

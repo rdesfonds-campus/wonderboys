@@ -13,7 +13,10 @@ public abstract class Cell {
     /**
      * Méthode appelée quand un personnage arrive sur cette case.
      */
-    public abstract void interact(Character hero);
+    public void interact(Character hero) {
+        System.out.println("PIÈGE ! Tu perds X PV");
+        hero.setLifeLevel(hero.getLifeLevel());
+    }
 
     /**
      * Retourne une description textuelle de la case.
@@ -22,4 +25,5 @@ public abstract class Cell {
      */
     @Override
     public abstract String toString();
+
 }
