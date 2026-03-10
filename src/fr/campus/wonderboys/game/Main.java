@@ -1,5 +1,6 @@
 package fr.campus.wonderboys.game;
 
+import fr.campus.wonderboys.characters.Wizard;
 import fr.campus.wonderboys.characters.enemies.*;
 import fr.campus.wonderboys.equipment.*;
 import fr.campus.wonderboys.characters.Warrior;

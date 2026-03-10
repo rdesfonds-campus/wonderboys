@@ -3,6 +3,7 @@ package fr.campus.wonderboys.game;
 import fr.campus.wonderboys.characters.Character;
 import fr.campus.wonderboys.characters.Warrior;
 import fr.campus.wonderboys.characters.Wizard;
+import fr.campus.wonderboys.characters.enemies.*;
 import fr.campus.wonderboys.db.HeroDAO;
 import fr.campus.wonderboys.equipment.*;
 import java.util.ArrayList;
@@ -54,9 +55,16 @@ public class Game {
             menu.showMessage("4 - Démarrer la partie");
             menu.showMessage("5 - Quitter le jeu");
 
+            menu.showMessage("0 - Test monstres (nouveau !)");
+
             choice = menu.askInt("Que veux-tu faire ?");
 
             switch (choice) {
+
+                case 0:  // 👈 AJOUT ICI
+                    testMonstres();
+                    break;
+
                 case 1:
                     menu.showMessage("On va créer un nouveau personnage !");
                     createCharacter();
@@ -471,4 +479,55 @@ public class Game {
         System.out.println("Tu es sur : " + currentCase.toString());
         System.out.println("------------------");
     }
+    private void testMonstres() {
+        // Test des héros
+        Warrior william = new Warrior("William", 20, 5, null, null);
+        Wizard gandalf = new Wizard("Gandalf", 15, 7, null, null);
+
+        System.out.println("=== HÉROS ===");
+        System.out.println(william);
+        System.out.println(gandalf);
+        System.out.println();
+
+        // Test des monstres faibles
+        System.out.println("=== MONSTRES FAIBLES ===");
+        Serpent serpent = new Serpent();
+        Champignon champ = new Champignon();
+        ChauveSouris souris = new ChauveSouris();
+        Crabe crabe = new Crabe();
+        Goblin goblin = new Goblin();
+        Singe singe = new Singe();
+
+        System.out.println(serpent);
+        System.out.println(champ);
+        System.out.println(souris);
+        System.out.println(crabe);
+        System.out.println(goblin);
+        System.out.println(singe);
+        System.out.println();
+
+        // Test des monstres moyens
+        System.out.println("=== MONSTRES MOYENS ===");
+        Chevalier chevalier = new Chevalier();
+        Squelette squelette = new Squelette();
+
+        System.out.println(chevalier);
+        System.out.println(squelette);
+        System.out.println();
+
+        // Test des boss
+        System.out.println("=== BOSS ===");
+        Sorcier sorcier = new Sorcier();
+        Dragon dragon = new Dragon();
+        Golem golem = new Golem();
+        Vampire vampire = new Vampire();
+        PapaOgre ogre = new PapaOgre();
+
+        System.out.println(sorcier);
+        System.out.println(dragon);
+        System.out.println(golem);
+        System.out.println(vampire);
+        System.out.println(ogre);
+    }
+
 }
