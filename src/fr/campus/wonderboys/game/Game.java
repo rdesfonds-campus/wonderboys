@@ -420,7 +420,7 @@ public class Game {
 
         // Tant que tu n'es pas à la fin, tu rejoues un tour
         while (currentCharacter.getBoardPosition() < board.getTotalSquares()) {
-            menu.askString("Appuie sur Entrée pour lancer le dé (tour suivant) :");
+            menu.askString("Lancer le dé pour avancer (tour suivant) :");
 
             int roll = dice.roll();
             System.out.println("Tu lances le dé : " + roll);
@@ -465,10 +465,45 @@ public class Game {
                     if (choixMonstre == 3) {
                         menu.showMessage(currentCharacter.toString());
                     } else if (choixMonstre == 1) {
-                        menu.showMessage("Tu attaques ! (combat plus tard)");
+                        // Combat : joueur attaque monstre, puis monstre contre-attaque
+                        menu.showMessage("COMBAT !");
+                        // Joueur attaque (simulé)
+                        int degatsJoueur = rand.nextInt(1, 11) + currentCharacter.getAttackLevel() / 2;  // Force/2 + dé
+                        menu.showMessage("Tu infliges " + degatsJoueur + " dégâts au " + monsterName);
+                        // Monstre attaque (selon type)
+                        int degatsMonstre;
+                        if (monsterName.contains("1d4")) degatsMonstre = rand.nextInt(1, 5);
+                        else if (monsterName.contains("1d6")) degatsMonstre = rand.nextInt(1, 7);
+                        else degatsMonstre = rand.nextInt(1, 9);
+                        currentCharacter.setLifeLevel(currentCharacter.getLifeLevel() - degatsMonstre);
+                        menu.showMessage(monsterName + " t'inflige " + degatsMonstre + " dégâts. Vie restante : " + currentCharacter.getLifeLevel());
+                        if (currentCharacter.getLifeLevel() <= 0) {
+                            menu.showMessage("Tu es vaincu ! Game Over.");
+                            // Quitte jeu
+                            return;
+                        }
+
                     } else if (choixMonstre == 2) {
-                        menu.showMessage("Tu fuis ! (test plus tard)");
-                        // ENLÈVE tout le code monstres ici
+                        menu.showMessage("Test de fuite...");
+                        double fuiteProba = rand.nextDouble();
+                        if (fuiteProba < 0.5) {
+                            menu.showMessage("Fuite réussie ! \nTu cours vers la prochaine salle.");
+                            break;  // QUITTE menu combat, va à "Vous quittez la pièce"
+                        } else {
+                            menu.showMessage("Fuite ratée ! Le " + monsterName + " te rattrape.");
+                            int degatsFuite;
+                            if (monsterName.contains("1d4")) degatsFuite = rand.nextInt(1,5);
+                            else if (monsterName.contains("1d6")) degatsFuite = rand.nextInt(1,7);
+                            else degatsFuite = rand.nextInt(1,9);
+                            currentCharacter.setLifeLevel(currentCharacter.getLifeLevel() - degatsFuite);
+                            menu.showMessage("Il t'inflige " + degatsFuite + " dégâts. Vie : " + currentCharacter.getLifeLevel());
+                            if (currentCharacter.getLifeLevel() <= 0) {
+                                menu.showMessage("Tu es mort en fuyant ! Fin du jeu.");
+                                return;
+                            }
+                        }
+
+
                     }
                     // Pas d'else pour 4, la boucle s'arrête
                 } while (choixMonstre != 4);
@@ -481,12 +516,11 @@ public class Game {
                     caseActuelle.interact(currentCharacter);  // Trésor/piège si pas vide
                 }
             }
-            menu.askString("Vous quittez la pièce. Entrée pour avancer : ");
+            menu.askString("Vous quittez la pièce. \n (Appuyez sur Entrée) ");
 
 
             Cell caseActuelle = board.getCell(newPosition - 1);
             if (caseActuelle instanceof EmptyCell) {
-                System.out.println("La case est vide (rien pour le moment).");
             } else if (caseActuelle instanceof EnemyCell) {
                 System.out.println("La case est occupée par un monstre !");
 
