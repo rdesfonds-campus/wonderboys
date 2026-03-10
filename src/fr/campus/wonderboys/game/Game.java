@@ -420,16 +420,29 @@ public class Game {
 
         // Tant que tu n'es pas à la fin, tu rejoues un tour
         while (currentCharacter.getBoardPosition() < board.getTotalSquares()) {
-            menu.askString("Lancer le dé pour avancer (tour suivant) :");
+           //menu.askString("Lancer le dé pour avancer (tour suivant) :");
 
             int roll = dice.roll();
             System.out.println("Tu lances le dé : " + roll);
 
             int newPosition = currentCharacter.getBoardPosition() + roll;
-            if (newPosition > 64) {
-                newPosition = 64;
-                System.out.println("Vous êtes allé trop vite. Vous avez raté le trésor mais vous êtes toujours vivant.");
+            if (newPosition >= 64) {
+                if (newPosition == 64) {
+                    menu.showMessage("Bravo, vous avez trouvé la salle du trésor. Recevez 1000 points.");
+                } else {
+                    menu.showMessage("Vous êtes allé trop vite et avez loupé le trésor...\n Au moins vous sortez encore en vie.");
+                }
+                menu.showMessage("THANK YOU FOR PLAYING ! Score : " + currentCharacter.getScore());
+                // Score BDD TODO (if > max)
+                HeroDAO dao = new HeroDAO();
+                dao.changeLifePointsCharacter(currentCharacter.getId(), currentCharacter.getLifeLevel());
+                break;  // CRUCIAL : sort while, enlève "Bravo case 64 !"
             }
+
+            currentCharacter.setBoardPosition(newPosition);
+// ... reste jet rencontre
+
+
 
             currentCharacter.setBoardPosition(newPosition);
             menu.showMessage("Tu arrives à la case " + newPosition);
@@ -507,17 +520,48 @@ public class Game {
                     }
                     // Pas d'else pour 4, la boucle s'arrête
                 } while (choixMonstre != 4);
-            }
-            else {
+            } else {
                 // 50% SALLE
-                menu.showMessage("Vous arrivez dans une nouvelle salle. \n Que voulez-vous faire ?");
-                Cell caseActuelle = board.getCell(newPosition - 1);  // -1 si cases 1-based
-                if (!(caseActuelle instanceof EmptyCell)) {
-                    caseActuelle.interact(currentCharacter);  // Trésor/piège si pas vide
+                menu.showMessage("Vous arrivez dans une nouvelle salle.");
+                menu.showMessage("Que voulez-vous faire ?");
+                int choixSalle;
+                do {
+                    menu.showMessage("1 - Fouiller");
+                    menu.showMessage("2 - Quitter");
+                    choixSalle = menu.askInt("Choix : ");
+                } while (choixSalle != 1 && choixSalle != 2);
+                if (choixSalle == 1) {
+                    // Fouiller jet
+                }
+
+                boolean fouillee = false;
+                if (choixSalle == 1) {
+                    fouillee = true;
+                    // JET FOUILLER
+                    double fouilleProba = rand.nextDouble();
+                    if (fouilleProba < 0.3) {
+                        menu.showMessage("Vous ne trouvez rien.");
+                    } else if (fouilleProba < 0.7) {  // 40%
+                        menu.showMessage("Vous trouvez un petitTrésor ! +10 score (TODO)");
+                    } else if (fouilleProba < 0.9) {  // 20%
+                        menu.showMessage("🪨 Vous déclenchez un ÉBOULEMENT ! Les pierres vous infligent -5 PV");
+                        currentCharacter.setLifeLevel(currentCharacter.getLifeLevel() - 5);
+                        if (currentCharacter.getLifeLevel() <= 0) {
+                            menu.showMessage("Mort par piège ! Fin du jeu.");
+                            return;
+                        }
+                    } else {  // 10%
+                        menu.showMessage("SuperTresor ! Potion + tous PV");
+                        currentCharacter.setLifeLevel(currentCharacter.getMaxLifeLevel());
+                    }
+                }
+                // Interact SEULEMENT si pas fouillé ET pas vide
+                Cell caseActuelle = board.getCell(newPosition - 1);
+                if (!fouillee && !(caseActuelle instanceof EmptyCell)) {
+                    caseActuelle.interact(currentCharacter);
                 }
             }
-            menu.askString("Vous quittez la pièce. \n (Appuyez sur Entrée) ");
-
+            menu.askString("Vous vous relevez et quittez la pièce. (Entrée pour avancer)");
 
             Cell caseActuelle = board.getCell(newPosition - 1);
             if (caseActuelle instanceof EmptyCell) {
