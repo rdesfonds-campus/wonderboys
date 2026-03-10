@@ -5,12 +5,23 @@ import fr.campus.wonderboys.pieges.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Plateau de jeu 64 cases avec génération random de pièges/trésors.
+ * Max 1 Oubliette pour raréfaction.
+ */
 public class Board {
 
     private List<Cell> cells;
     private int totalSquares;
+    /**
+     * Compteur oubliettes placées (max 1).
+     */
+    private int oubliettesCount = 0;
 
-    public Board() { // ← public Board() pas SortUltimaCell
+    /**
+     * Constructeur : 64 cases vides + 5 pièges + 10 trésors + boss case 63.
+     */
+    public Board() {
         this.totalSquares = 64;
         this.cells = new ArrayList<>();
 
@@ -19,10 +30,10 @@ public class Board {
             cells.add(new EmptyCell());
         }
 
-        // Place 5 pièges random
+        // Place 5 pièges random (max 1 Oubliette)
         placerPiges(5);
 
-        // Place 10 trésors random (taux %)
+        // Place 10 trésors random
         placerTresor(10);
 
         // Boss case 63
@@ -32,23 +43,36 @@ public class Board {
         // placerMonstres(30);
     }
 
+    /**
+     * Place 'nombre' pièges random, max 1 Oubliette.
+     * @param nombre nombre de pièges à placer
+     */
     private void placerPiges(int nombre) {
         for (int i = 0; i < nombre; i++) {
             int pos = (int)(Math.random() * 64);
-            Cell piege = piegeAleatoire();
+            Cell piege;
+            if (oubliettesCount < 1 && Math.random() < 0.3) { // 30% chance si <1
+                piege = new Oubliette();
+                oubliettesCount++;
+            } else {
+                piege = piegeAleatoireNonOubliette();
+            }
             cells.set(pos, piege);
         }
     }
 
-    private Cell piegeAleatoire() {
-        int choix = (int)(Math.random() * 5);
+    /**
+     * Piège aléatoire SANS oubliette (pour raréfaction).
+     * @return Cell piège non-oubliette
+     */
+    private Cell piegeAleatoireNonOubliette() {
+        int choix = (int)(Math.random() * 4); // 4 types
         switch(choix) {
-            case 0: return new Trou();
-            case 1: return new Mine();
-            case 2: return new NuagePoison();
-            case 3: return new Eboulement();
-            case 4: return new Flammes();
-            default: return new Trou();
+            case 0: return new Mine();
+            case 1: return new NuagePoison();
+            case 2: return new Eboulement();
+            case 3: return new Flammes();
+            default: return new Mine();
         }
     }
 
@@ -72,6 +96,11 @@ public class Board {
         else return new EtoileMarioCell();
     }
 
+    /**
+     * Récupère la Cell à l'index (0-based, safe).
+     * @param index position sur plateau (1-64 → 0-63)
+     * @return Cell ou EmptyCell si hors limites
+     */
     public Cell getCell(int index) {
         if (index < 0 || index >= cells.size()) {
             return new EmptyCell();
@@ -79,12 +108,17 @@ public class Board {
         return cells.get(index);
     }
 
+    /**
+     * Nombre total de cases (64).
+     * @return int 64
+     */
     public int getTotalSquares() {
         return totalSquares;
     }
 
     @Override
     public String toString() {
-        return "Board{totalSquares=" + totalSquares + ", cells=" + cells.size() + "}";
+        return "Board{totalSquares=" + totalSquares + ", cells=" + cells.size() +
+                ", oubliettes=" + oubliettesCount + "}";
     }
 }

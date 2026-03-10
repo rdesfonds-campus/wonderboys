@@ -401,7 +401,7 @@ public class Game {
         Dice dice = new Dice();
 
         // Au démarrage, le joueur est sur la case 1
-        playerPosition = 1;
+        currentCharacter.setBoardPosition(1);
 
         menu.showMessage("Début de la partie !");
         menu.showMessage("Personnage : " + currentCharacter.getName());
@@ -413,10 +413,9 @@ public class Game {
         }
 
         // Tant que tu n'es pas à la fin, tu rejoues un tour
-        while (playerPosition < board.getTotalSquares()) {
-
+        while (currentCharacter.getBoardPosition() < board.getTotalSquares()) {
             int roll = dice.roll();
-            int newPosition = playerPosition + roll;
+            int newPosition = currentCharacter.getBoardPosition() + roll;
 
             if (newPosition > board.getTotalSquares()) {
                 throw new OutOfBoardException(
@@ -425,10 +424,17 @@ public class Game {
             }
 
             menu.showMessage("Tu lances le dé : " + roll);
-            menu.showMessage("Tu avances : " + playerPosition + " -> " + newPosition);
+            menu.showMessage("Tu avances : " + currentCharacter.getBoardPosition() + " -> " + newPosition);
 
-            playerPosition = newPosition;
+            currentCharacter.setBoardPosition(newPosition);
+
+            // Interaction avec la case
+            board.getCell(currentCharacter.getBoardPosition() - 1).interact(currentCharacter);
+
+            // Affichage position actuelle
+            menu.showMessage("Tu es maintenant à la case : " + currentCharacter.getBoardPosition());
         }
+
 
         menu.showMessage("Bravo ! Tu es arrivé à la case " + board.getTotalSquares() + " !");
         HeroDAO heroDAO = new HeroDAO();

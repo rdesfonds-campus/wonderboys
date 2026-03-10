@@ -1,6 +1,5 @@
 package fr.campus.wonderboys.game;
 
-import fr.campus.wonderboys.characters.Wizard;
 import fr.campus.wonderboys.characters.enemies.*;
 import fr.campus.wonderboys.equipment.*;
 import fr.campus.wonderboys.characters.Warrior;
@@ -88,7 +87,7 @@ public class Main {
 
         System.out.println("\n=== TEST PIÈGE TROU ===");
         Warrior hero5 = new Warrior("Test", 10, 3, null, null);
-        Trou trou = new Trou();
+        Oubliette trou = new Oubliette();
         trou.interact(hero5);
         System.out.println(trou);
 
