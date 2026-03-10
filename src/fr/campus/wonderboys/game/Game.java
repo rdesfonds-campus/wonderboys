@@ -31,12 +31,12 @@ public class Game {
         this.currentCharacter = null;
         this.playerPosition = 1;
 
-        // Mini-plateau pour les tests
+        /*// Mini-plateau pour les tests
         this.board = new ArrayList<>();
         board.add(new EmptyCell());
         board.add(new EnemyCell());
         board.add(new WeaponCell());
-        board.add(new PotionCell());
+        board.add(new PotionCell());*/
     }
 
     /**
@@ -398,6 +398,11 @@ public class Game {
         menu.showMessage("Début de la partie !");
         menu.showMessage("Personnage : " + currentCharacter.getName());
         menu.showMessage("Case " + playerPosition + " / " + board.getTotalSquares());
+
+        menu.showMessage("Aperçu du plateau :");
+        for (int i = 0; i < 10; i++) { // 10 premières cases
+            menu.showMessage("Case " + (i+1) + " : " + board.getCell(i));
+        }
 
         // Tant que tu n'es pas à la fin, tu rejoues un tour
         while (playerPosition < board.getTotalSquares()) {
