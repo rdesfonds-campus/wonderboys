@@ -29,7 +29,7 @@ public class Main {
         // Exemple: BoardCellDAO dao = new BoardCellDAO();
         // dao.loadBoard();
 
-        // === TEST CELLS (TOUJOURS ACTIF - PREMIER TEST) ===
+        /*// === TEST CELLS (TOUJOURS ACTIF - PREMIER TEST) ===
         System.out.println("\n=== TEST CELLS ===");
         Warrior hero = new Warrior("TestHero", 10, 5, null, null);
         EmptyCell empty = new EmptyCell();

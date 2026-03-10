@@ -8,6 +8,8 @@ import fr.campus.wonderboys.db.HeroDAO;
 import fr.campus.wonderboys.equipment.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
+
 import fr.campus.wonderboys.cells.*;
 import fr.campus.wonderboys.game.Board;
 import fr.campus.wonderboys.game.Dice;
@@ -47,18 +49,19 @@ public class Game {
      * Démarre le jeu avec boucle menu principal.
      */
     public void start() {
+        System.out.println("Salutations jeune aventurier !! Envie de combats, richesses et aventures ?\nExplore le super donjon et remporte le plus gros trésor !!\n =========================");
 
         int choice = 0;
 
         while (choice != 5) {
-            menu.showMessage("Bienvenue dans Wonderboy !");
-            menu.showMessage("1 - Nouveau personnage");
+            menu.showMessage("Bienvenue dans Wonderboys !");
+            menu.showMessage("1 - Créer un personnage");
             menu.showMessage("2 - Choisir un héros existant");
             menu.showMessage("3 - Modifier un personnage");
             menu.showMessage("4 - Démarrer la partie");
             menu.showMessage("5 - Quitter le jeu");
 
-            menu.showMessage("0 - Test monstres (nouveau !)");
+            //menu.showMessage("0 - Test monstres (nouveau !)");
 
             choice = menu.askInt("Que veux-tu faire ?");
 
@@ -402,11 +405,12 @@ public class Game {
         // On crée un dé à 6 faces (par défaut)
         Dice dice = new Dice();
 
-        // Au démarrage, le joueur est sur la case 1
-        currentCharacter.setBoardPosition(1);
+        // Au démarrage, le joueur est sur la case 0
+        currentCharacter.setBoardPosition(0);
 
         menu.showMessage("Début de la partie !");
         menu.showMessage("Personnage : " + currentCharacter.getName());
+
         menu.showMessage("Case " + playerPosition + " / " + board.getTotalSquares());
 
         /*menu.showMessage("Aperçu du plateau :");
@@ -426,8 +430,59 @@ public class Game {
                 newPosition = 64;
                 System.out.println("Vous êtes allé trop vite. Vous avez raté le trésor mais vous êtes toujours vivant.");
             }
+
             currentCharacter.setBoardPosition(newPosition);
-            System.out.println("Tu arrives à la case " + newPosition);
+            menu.showMessage("Tu arrives à la case " + newPosition);
+
+            // JET DE RENCONTRE
+            Random rand = new Random();
+            double proba = rand.nextDouble();
+            if (proba < 0.5) {
+                // CHOISIR MONSTRE AVANT menu
+                Random randMonstre = new Random();  // Nouveau rand pour éviter bug
+                String monsterName;
+                double typeProba = randMonstre.nextDouble();
+                if (typeProba < 0.6) {
+                    String[] petits = {"Serpent", "Champignon", "Singe", "Chauve-souris", "Crabe", "Goblin"};
+                    monsterName = petits[randMonstre.nextInt(petits.length)] + " (1d4)";
+                } else if (typeProba < 0.9) {
+                    String[] moyens = {"Chevalier", "Squelette", "Brigand"};
+                    monsterName = moyens[randMonstre.nextInt(moyens.length)] + " (1d6)";
+                } else {
+                    String[] boss = {"Sorcier", "Dragon", "Golem", "Chevalier", "Vampire", "Papa Ogre"};
+                    monsterName = boss[randMonstre.nextInt(boss.length)] + " (1d8)";
+                }
+                menu.showMessage("Un " + monsterName + " apparaît et vous attaque.");
+                menu.showMessage("Que voulez-vous faire ?");
+
+                int choixMonstre;
+                do {
+                    menu.showMessage("1 - Attaquer");
+                    menu.showMessage("2 - Fuir");
+                    menu.showMessage("3 - Stats");
+                    menu.showMessage("4 - Quitter");
+                    choixMonstre = menu.askInt("Choix : ");
+                    if (choixMonstre == 3) {
+                        menu.showMessage(currentCharacter.toString());
+                    } else if (choixMonstre == 1) {
+                        menu.showMessage("Tu attaques ! (combat plus tard)");
+                    } else if (choixMonstre == 2) {
+                        menu.showMessage("Tu fuis ! (test plus tard)");
+                        // ENLÈVE tout le code monstres ici
+                    }
+                    // Pas d'else pour 4, la boucle s'arrête
+                } while (choixMonstre != 4);
+            }
+            else {
+                // 50% SALLE
+                menu.showMessage("Vous arrivez dans une nouvelle salle. \n Que voulez-vous faire ?");
+                Cell caseActuelle = board.getCell(newPosition - 1);  // -1 si cases 1-based
+                if (!(caseActuelle instanceof EmptyCell)) {
+                    caseActuelle.interact(currentCharacter);  // Trésor/piège si pas vide
+                }
+            }
+            menu.askString("Vous quittez la pièce. Entrée pour avancer : ");
+
 
             Cell caseActuelle = board.getCell(newPosition - 1);
             if (caseActuelle instanceof EmptyCell) {
