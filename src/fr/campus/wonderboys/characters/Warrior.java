@@ -4,35 +4,43 @@ import fr.campus.wonderboys.equipment.OffensiveEquipment;
 import fr.campus.wonderboys.equipment.DefensiveEquipment;
 
 /**
- * Guerrier du jeu Wonderboy avec beaucoups PV et attaque physique.
+ * Guerrier du jeu Wonderboys avec beaucoup de PV et une forte attaque physique.
  * Hérite de Character pour partager nom, vie, attaque et équipements.
- *
- * @author Romain D
- * @version 1.0
  */
 public class Warrior extends Character {
 
     /**
-     * Crée un nouveau Warrior avec ses équipements par défaut.
+     * Crée un nouveau Warrior avec ses équipements de départ.
+     * Initialise aussi son habileté, son armure et son score.
      *
-     * @param name nom du guerrier
-     * @param lifeLevel niveau de vie (généralement élevé)
-     * @param attackLevel niveau d'attaque physique
-     * @param weapon arme offensive (épée, hache...)
-     * @param defense bouclier ou armure
+     * @param name        nom du guerrier
+     * @param lifeLevel   niveau de vie de départ (généralement élevé)
+     * @param attackLevel niveau d'attaque physique de départ
+     * @param weapon      arme offensive équipée (épée, hache...)
+     * @param defense     bouclier ou armure équipée
      */
     public Warrior(String name, int lifeLevel, int attackLevel,
                    OffensiveEquipment weapon, DefensiveEquipment defense) {
         super("Warrior", name, lifeLevel, attackLevel, weapon, defense);
+
+        // Valeurs par défaut pour le système de combat
+        setSkill(10);          // Habileté de base du guerrier
+        setArmorModifier(1);   // Léger bonus d'armure
+        setScore(0);           // Le guerrier commence avec 0 point de score
     }
 
     /**
-     * Affiche les infos du guerrier de façon lisible.
+     * Affiche les informations principales du guerrier.
      *
-     * @return chaîne avec nom, vie et attaque
+     * @return chaîne lisible avec type, nom, vie, attaque et score
      */
     @Override
     public String toString() {
-        return "Warrior : " + getName() + ", Vie : " + getLifeLevel() + ", Attaque : " + getAttackLevel();
+        return "Warrior : " + getName()
+                + ", Vie : " + getLifeLevel()
+                + ", Attaque : " + getAttackLevel()
+                + ", Habileté : " + getSkill()
+                + ", Armure : " + getArmorModifier()
+                + ", Score : " + getScore();
     }
 }
