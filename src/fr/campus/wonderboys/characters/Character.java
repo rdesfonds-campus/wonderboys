@@ -28,6 +28,18 @@ public abstract class Character {
 
     // --- Attribut pour la gestion des PV max ---
     private int maxLifeLevel = 20; // Points de vie maximum (par défaut)
+    //--- Attribut de la position du personnage ---
+    private int position = 1; // case de départ
+
+    private int boardPosition = 1;
+
+    public int getBoardPosition() {
+        return boardPosition;
+    }
+
+    public void setBoardPosition(int boardPosition) {
+        this.boardPosition = boardPosition;
+    }
 
     /**
      * Constructeur principal du personnage.
@@ -63,6 +75,8 @@ public abstract class Character {
     public int getArmorModifier() { return armorModifier; }
     public int getScore() { return score; }
 
+    public int getPosition() { return position; }
+
     public int getMaxLifeLevel() { return maxLifeLevel; }
 
     // --- Setters (accès en écriture / modification) ---
@@ -80,6 +94,7 @@ public abstract class Character {
 
     public void setMaxLifeLevel(int max) { this.maxLifeLevel = max; }
 
+    public void setPosition(int position) { this.position = position;}
     /**
      * Méthode spéciale pour gérer un fragment de puissance.
      * TODO : implémenter réellement cet effet si besoin.

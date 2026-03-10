@@ -8,6 +8,9 @@ import fr.campus.wonderboys.db.HeroDAO;
 import fr.campus.wonderboys.equipment.*;
 import java.util.ArrayList;
 import java.util.List;
+import fr.campus.wonderboys.cells.*;
+import fr.campus.wonderboys.game.Board;
+import fr.campus.wonderboys.game.Dice;
 
 /**
  * Gère une partie complète de Wonderboys avec menu et personnages.
@@ -32,12 +35,12 @@ public class Game {
         this.currentCharacter = null;
         this.playerPosition = 1;
 
-        /*// Mini-plateau pour les tests
+        // Mini-plateau pour les tests
         this.board = new ArrayList<>();
         board.add(new EmptyCell());
         board.add(new EnemyCell());
         board.add(new WeaponCell());
-        board.add(new PotionCell());*/
+        board.add(new PotionCell());
     }
 
     /**
@@ -61,9 +64,9 @@ public class Game {
 
             switch (choice) {
 
-                case 0:  // 👈 AJOUT ICI
+                /*case 0:
                     testMonstres();
-                    break;
+                    break;*/
 
                 case 1:
                     menu.showMessage("On va créer un nouveau personnage !");
@@ -128,6 +131,7 @@ public class Game {
             lifeLevel = 10;
             attackLevel = 10;
             menu.showMessage("Tu as choisi : Warrior");
+
             // Choix de la nouvelle arme
             menu.showMessage("Choisis une nouvelle arme :");
             menu.showMessage("1 - Épée rouillée");
@@ -151,6 +155,7 @@ public class Game {
             } else {
                 defenseName = "Grande potion de soin";
             }
+
         } else {
             type = "Wizard";
             lifeLevel = 6;
@@ -198,7 +203,6 @@ public class Game {
         } else {
             defense = new Potion(3, defenseName);
         }
-
 
         if (type.equals("Warrior")) {
             currentCharacter = new Warrior(name, lifeLevel, attackLevel, weapon, defense);
@@ -251,7 +255,7 @@ public class Game {
         menu.showMessage("Liste des héros en base :");
 
         HeroDAO heroDAO = new HeroDAO();
-        heroDAO.getHeroes();   // affiche les héros en console
+        heroDAO.getHeroes(); // affiche les héros en console
 
         int idToEdit = menu.askInt("Quel Id de héros veux-tu modifier ?");
 
@@ -354,8 +358,6 @@ public class Game {
                 " avec le nom : " + newName);
     }
 
-
-
     /**
      * Choisir un héros existant en BDD pour jouer.
      */
@@ -401,33 +403,43 @@ public class Game {
         Dice dice = new Dice();
 
         // Au démarrage, le joueur est sur la case 1
-        playerPosition = 1;
+        currentCharacter.setBoardPosition(1);
 
         menu.showMessage("Début de la partie !");
         menu.showMessage("Personnage : " + currentCharacter.getName());
         menu.showMessage("Case " + playerPosition + " / " + board.getTotalSquares());
 
-        menu.showMessage("Aperçu du plateau :");
+        /*menu.showMessage("Aperçu du plateau :");
         for (int i = 0; i < 10; i++) { // 10 premières cases
-            menu.showMessage("Case " + (i+1) + " : " + board.getCell(i));
-        }
+            menu.showMessage("Case " + (i + 1) + " : " + board.getCell(i));
+        }*/
 
         // Tant que tu n'es pas à la fin, tu rejoues un tour
-        while (playerPosition < board.getTotalSquares()) {
+        while (currentCharacter.getBoardPosition() < board.getTotalSquares()) {
+            menu.askString("Appuie sur Entrée pour lancer le dé (tour suivant) :");
 
             int roll = dice.roll();
-            int newPosition = playerPosition + roll;
+            System.out.println("Tu lances le dé : " + roll);
 
-            if (newPosition > board.getTotalSquares()) {
-                throw new OutOfBoardException(
-                        "Position " + newPosition + " hors du plateau (max = " + board.getTotalSquares() + ")"
-                );
+            int newPosition = currentCharacter.getBoardPosition() + roll;
+            if (newPosition > 64) {
+                newPosition = 64;
+                System.out.println("Vous êtes allé trop vite. Vous avez raté le trésor mais vous êtes toujours vivant.");
             }
+            currentCharacter.setBoardPosition(newPosition);
+            System.out.println("Tu arrives à la case " + newPosition);
 
-            menu.showMessage("Tu lances le dé : " + roll);
-            menu.showMessage("Tu avances : " + playerPosition + " -> " + newPosition);
+            Cell caseActuelle = board.getCell(newPosition - 1);
+            if (caseActuelle instanceof EmptyCell) {
+                System.out.println("La case est vide (rien pour le moment).");
+            } else if (caseActuelle instanceof EnemyCell) {
+                System.out.println("La case est occupée par un monstre !");
 
-            playerPosition = newPosition;
+
+            } else {
+                System.out.println("La case est occupée (trésor ou piège).");
+                caseActuelle.interact(currentCharacter); // Active trésor/piège seulement si pas monstre
+            }
         }
 
         menu.showMessage("Bravo ! Tu es arrivé à la case " + board.getTotalSquares() + " !");
@@ -436,7 +448,6 @@ public class Game {
                 currentCharacter.getId(),
                 currentCharacter.getLifeLevel()
         );
-
 
         int endChoice = 0;
 
@@ -464,7 +475,7 @@ public class Game {
         return 1;
     }
 
-    public void playTurnMiniBoard() {
+    /*public void playTurnMiniBoard() {
         System.out.println("\n--- NOUVEAU TOUR ---");
         int diceResult = rollDice();
         playerPosition += diceResult;
@@ -479,6 +490,7 @@ public class Game {
         System.out.println("Tu es sur : " + currentCase.toString());
         System.out.println("------------------");
     }
+
     private void testMonstres() {
         // Test des héros
         Warrior william = new Warrior("William", 20, 5, null, null);
@@ -528,6 +540,5 @@ public class Game {
         System.out.println(golem);
         System.out.println(vampire);
         System.out.println(ogre);
-    }
-
+    }*/
 }
