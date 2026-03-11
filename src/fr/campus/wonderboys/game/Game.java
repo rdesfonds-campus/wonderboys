@@ -491,16 +491,21 @@ public class Game {
                             menu.showMessage("Jet d'attaque : " + jetAttaqueJoueur + " (besoin de " + seuilPourToucher + " ou plus)");
 
                             if (jetAttaqueJoueur >= seuilPourToucher || jetAttaqueJoueur == 20) {
-                                // Joueur touche : on calcule les dégâts comme avant (provisoirement)
                                 int degatsJoueur = rand.nextInt(1, 11) + currentCharacter.getAttackLevel() / 2;
+
+                                if (jetAttaqueJoueur == 20) {
+                                    degatsJoueur *= 2;  // critique : dégâts doublés
+                                    menu.showMessage("20 naturel ! Coup critique !!");
+                                }
+
                                 menu.showMessage("Tu touches ! Tu infliges " + degatsJoueur + " dégâts au " + monsterName);
-                                // TODO : ici on enlèvera les PV du monstre quand on aura un vrai objet monstre
-                            } else {
+
+                       } else {
                                 menu.showMessage("Tu rates ton attaque.");
                             }
                         }
 
-                        menu.showMessage("Tu infliges " + degatsJoueur + " dégâts au " + monsterName);
+                        //menu.showMessage("Tu infliges " + degatsJoueur + " dégâts au " + monsterName);
                         // Monstre attaque (selon type)
                         int degatsMonstre;
                         if (monsterName.contains("1d4")) degatsMonstre = rand.nextInt(1, 5);
