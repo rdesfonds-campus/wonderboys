@@ -14,6 +14,8 @@ public abstract class Enemy extends Character {
     // --- Attributs spécifiques aux ennemis ---
     private Dice damageDice;        // Dés pour calculer les dégâts
     private int scoreValue;         // Points de score gagnés quand l'ennemi est vaincu
+    private int thac0;
+    private int ca;
 
     /**
      * Constructeur simple (pour Main, dégâts 1d6 par défaut).
@@ -80,4 +82,27 @@ public abstract class Enemy extends Character {
     public void setScoreValue(int scoreValue) {
         this.scoreValue = scoreValue;
     }
+    /**
+     * Vérifie si l'ennemi est mort (PV <= 0).
+     * @return true si mort
+     */
+    public boolean estMort() {
+        return getLifeLevel() <= 0;  // Utilise lifeLevel de Character
+    }
+
+    /**
+     * Applique dégâts à cet ennemi.
+     * @param degats nombre de dégâts à subir
+     */
+    public void subirDegats(int degats) {
+        setLifeLevel(getLifeLevel() - degats);
+        if (estMort()) {
+            onDefeated();
+        }
+    }
+    public int getThac0() { return thac0; }
+    public void setThac0(int thac0) { this.thac0 = thac0; }
+    public int getCa() { return ca; }
+    public void setCa(int ca) { this.ca = ca; }
+
 }

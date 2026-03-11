@@ -1,7 +1,6 @@
-package fr.campus.wonderboys.characters.enemies;
+package fr.campus.wonderboys.characters.enemies.d6;
 
-import fr.campus.wonderboys.equipment.OffensiveEquipment;
-import fr.campus.wonderboys.equipment.DefensiveEquipment;
+import fr.campus.wonderboys.characters.enemies.Enemy;
 import fr.campus.wonderboys.game.Dice;
 
 /**
@@ -20,6 +19,9 @@ public class Brigand extends Enemy {
         // Valeurs spécifiques au Brigand
         setSkill(3);           // S3 selon tes specs
         setArmorModifier(1);   // A1 selon tes specs
+        setThac0(20);
+        setCa(6);
+
     }
 
     /**

@@ -1,9 +1,6 @@
 package fr.campus.wonderboys.game;
 
-import fr.campus.wonderboys.characters.enemies.*;
-import fr.campus.wonderboys.equipment.*;
-import fr.campus.wonderboys.characters.Warrior;
-import fr.campus.wonderboys.pieges.*;
+import fr.campus.wonderboys.characters.enemies.d4.Goblin;
 
 /**
  * Classe principale du jeu Wonderboys.
@@ -159,6 +156,10 @@ public class Main {
         flammes.interact(hero5);
         System.out.println(flammes);
         */
+        /*Goblin g = new Goblin();  // ✅ Marche !
+        System.out.println(g);  // toString
+        g.subirDegats(9);  // Meurt + message score*/
+
 
         // === LANCEMENT DU JEU COMPLET (COMMENTÉ POUR NE PAS LE FAIRE TOURNER) ===
 
@@ -170,4 +171,5 @@ public class Main {
 
         // Fin de main - Tous les tests sont prêts, un seul actif !
     }
+    
 }

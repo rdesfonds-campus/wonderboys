@@ -1,5 +1,6 @@
-package fr.campus.wonderboys.characters;
+package fr.campus.wonderboys.characters.heros;
 
+import fr.campus.wonderboys.characters.Character;
 import fr.campus.wonderboys.equipment.OffensiveEquipment;
 import fr.campus.wonderboys.equipment.DefensiveEquipment;
 
@@ -27,6 +28,9 @@ public class Wizard extends Character {
         setSkill(11);          // Magicien un peu plus habile mais fragile
         setArmorModifier(0);   // Très peu de protection physique
         setScore(0);           // Le magicien commence aussi avec 0 point de score
+        setThac0(20);     // THAC0 débutant
+        setCa(8);         // CA haute = fragile
+
     }
 
     /**
@@ -41,6 +45,8 @@ public class Wizard extends Character {
                 + ", Attaque : " + getAttackLevel()
                 + ", Habileté : " + getSkill()
                 + ", Armure : " + getArmorModifier()
-                + ", Score : " + getScore();
+                + ", Score : " + getScore()
+                + ", TACO : " + getThac0()
+                + ", CA : " + getCa();
     }
 }

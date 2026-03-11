@@ -1,7 +1,6 @@
-package fr.campus.wonderboys.characters.enemies;
+package fr.campus.wonderboys.characters.enemies.boss;
 
-import fr.campus.wonderboys.equipment.OffensiveEquipment;
-import fr.campus.wonderboys.equipment.DefensiveEquipment;
+import fr.campus.wonderboys.characters.enemies.Enemy;
 import fr.campus.wonderboys.game.Dice;
 
 /**
@@ -20,6 +19,9 @@ public class Dragon extends Enemy {
         // Valeurs spécifiques au Dragon BOSS
         setSkill(8);           // S8 selon tes specs
         setArmorModifier(8);   // A8 selon tes specs
+        setThac0(18);  // Bon THAC0
+        setCa(2);      // CA basse = dur à toucher
+
     }
 
     /**

@@ -1,5 +1,6 @@
-package fr.campus.wonderboys.characters;
+package fr.campus.wonderboys.characters.heros;
 
+import fr.campus.wonderboys.characters.Character;
 import fr.campus.wonderboys.equipment.OffensiveEquipment;
 import fr.campus.wonderboys.equipment.DefensiveEquipment;
 
@@ -27,6 +28,9 @@ public class Warrior extends Character {
         setSkill(10);          // Habileté de base du guerrier
         setArmorModifier(1);   // Léger bonus d'armure
         setScore(0);           // Le guerrier commence avec 0 point de score
+        setThac0(19);     // Bon THAC0 pour guerrier
+        setCa(5);         // CA moyenne (armure)
+
     }
 
     /**
@@ -41,6 +45,9 @@ public class Warrior extends Character {
                 + ", Attaque : " + getAttackLevel()
                 + ", Habileté : " + getSkill()
                 + ", Armure : " + getArmorModifier()
-                + ", Score : " + getScore();
+                + ", Score : " + getScore()
+                + ", TACO : " + getThac0()
+                + ", CA : " + getCa();
+
     }
 }

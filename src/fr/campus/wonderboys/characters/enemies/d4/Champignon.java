@@ -1,7 +1,6 @@
-package fr.campus.wonderboys.characters.enemies;
+package fr.campus.wonderboys.characters.enemies.d4;
 
-import fr.campus.wonderboys.equipment.OffensiveEquipment;
-import fr.campus.wonderboys.equipment.DefensiveEquipment;
+import fr.campus.wonderboys.characters.enemies.Enemy;
 import fr.campus.wonderboys.game.Dice;
 
 /**
@@ -17,9 +16,13 @@ public class Champignon extends Enemy {
     public Champignon() {
         super("Champignon", 5, 4, null, null, new Dice(4), 10);
 
+
         // Valeurs spécifiques au Champignon
         setSkill(1);           // S1 selon tes specs
         setArmorModifier(0);   // A0 selon tes specs
+        setThac0(21);  // Mauvais THAC0, touche rarement
+        setCa(9);      // CA haute = facile à toucher
+
     }
 
     /**

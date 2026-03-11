@@ -1,9 +1,8 @@
 package fr.campus.wonderboys.game;
 
 import fr.campus.wonderboys.characters.Character;
-import fr.campus.wonderboys.characters.Warrior;
-import fr.campus.wonderboys.characters.Wizard;
-import fr.campus.wonderboys.characters.enemies.*;
+import fr.campus.wonderboys.characters.heros.Warrior;
+import fr.campus.wonderboys.characters.heros.Wizard;
 import fr.campus.wonderboys.db.HeroDAO;
 import fr.campus.wonderboys.equipment.*;
 import java.util.ArrayList;
@@ -11,8 +10,6 @@ import java.util.List;
 import java.util.Random;
 
 import fr.campus.wonderboys.cells.*;
-import fr.campus.wonderboys.game.Board;
-import fr.campus.wonderboys.game.Dice;
 
 /**
  * Gère une partie complète de Wonderboys avec menu et personnages.
@@ -481,8 +478,28 @@ public class Game {
                     } else if (choixMonstre == 1) {
                         // Combat : joueur attaque monstre, puis monstre contre-attaque
                         menu.showMessage("COMBAT !");
-                        // Joueur attaque (simulé)
-                        int degatsJoueur = rand.nextInt(1, 11) + currentCharacter.getAttackLevel() / 2;  // Force/2 + dé
+                        // --- Jet d'attaque du joueur au D20 avec THAC0/CA ---
+                        Dice d20 = new Dice(20);
+                        int jetAttaqueJoueur = d20.roll();  // 1 à 20
+
+                    // Règle D&D : 1 = échec critique, 20 = coup critique
+                        if (jetAttaqueJoueur == 1) {
+                            menu.showMessage("Tu fais 1 au dé... échec critique, tu rates ton attaque !");
+                        } else {
+                            int seuilPourToucher = currentCharacter.getThac0() - 6; // provisoire : monstre CA 6
+
+                            menu.showMessage("Jet d'attaque : " + jetAttaqueJoueur + " (besoin de " + seuilPourToucher + " ou plus)");
+
+                            if (jetAttaqueJoueur >= seuilPourToucher || jetAttaqueJoueur == 20) {
+                                // Joueur touche : on calcule les dégâts comme avant (provisoirement)
+                                int degatsJoueur = rand.nextInt(1, 11) + currentCharacter.getAttackLevel() / 2;
+                                menu.showMessage("Tu touches ! Tu infliges " + degatsJoueur + " dégâts au " + monsterName);
+                                // TODO : ici on enlèvera les PV du monstre quand on aura un vrai objet monstre
+                            } else {
+                                menu.showMessage("Tu rates ton attaque.");
+                            }
+                        }
+
                         menu.showMessage("Tu infliges " + degatsJoueur + " dégâts au " + monsterName);
                         // Monstre attaque (selon type)
                         int degatsMonstre;

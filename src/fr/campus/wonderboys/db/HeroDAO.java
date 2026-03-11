@@ -4,8 +4,8 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import fr.campus.wonderboys.characters.Warrior;
-import fr.campus.wonderboys.characters.Wizard;
+import fr.campus.wonderboys.characters.heros.Warrior;
+import fr.campus.wonderboys.characters.heros.Wizard;
 import fr.campus.wonderboys.equipment.*;
 
 public class HeroDAO {

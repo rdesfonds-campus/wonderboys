@@ -1,7 +1,6 @@
-package fr.campus.wonderboys.characters.enemies;
+package fr.campus.wonderboys.characters.enemies.d4;
 
-import fr.campus.wonderboys.equipment.OffensiveEquipment;
-import fr.campus.wonderboys.equipment.DefensiveEquipment;
+import fr.campus.wonderboys.characters.enemies.Enemy;
 import fr.campus.wonderboys.game.Dice;
 
 /**

@@ -25,6 +25,8 @@ public abstract class Character {
 
     // --- Attribut pour le score du joueur ---
     private int score;          // Score total du personnage
+    private int thac0;     // THAC0 pour système D&D (score pour toucher CA 0)
+    private int ca;        // Classe d'Armure (bas = dur à toucher)
 
     // --- Attribut pour la gestion des PV max ---
     private int maxLifeLevel = 20; // Points de vie maximum (par défaut)
@@ -91,6 +93,10 @@ public abstract class Character {
     public void setSkill(int skill) { this.skill = skill; }
     public void setArmorModifier(int armorModifier) { this.armorModifier = armorModifier; }
     public void setScore(int score) { this.score = score; }
+    public int getThac0() { return thac0; }
+    public void setThac0(int thac0) { this.thac0 = thac0; }
+    public int getCa() { return ca; }
+    public void setCa(int ca) { this.ca = ca; }
 
     public void setMaxLifeLevel(int max) { this.maxLifeLevel = max; }
 
@@ -119,6 +125,9 @@ public abstract class Character {
                 ", skill=" + skill +
                 ", armorModifier=" + armorModifier +
                 ", score=" + score +
+                ", thac0=" + thac0 +
+                ", ca=" + ca +
                 '}';
     }
+
 }

@@ -1,6 +1,10 @@
 package fr.campus.wonderboys.game;
 
 import fr.campus.wonderboys.characters.Character;
+import fr.campus.wonderboys.characters.enemies.*;  // Pour tous
+import fr.campus.wonderboys.characters.enemies.d4.*;
+import fr.campus.wonderboys.characters.enemies.d6.*;
+import fr.campus.wonderboys.characters.enemies.boss.*;
 
 public class EnemyCell extends Cell {
 
