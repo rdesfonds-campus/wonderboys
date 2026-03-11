@@ -49,13 +49,14 @@ public class Game {
      * Démarre le jeu avec boucle menu principal.
      */
     public void start() {
-        System.out.println("Salutations jeune aventurier !! Envie de combats, richesses et aventures ?\nExplore le super donjon et remporte le plus gros trésor !!\n =========================");
+        System.out.println("Bienvenue dans WONDERBOYS !");
+        System.out.println("=========================\nSalutations jeune aventurier !! \nEnvie de combats, richesses et aventures ?\nExplore le super donjon et remporte le plus gros trésor !!\n=========================");
 
         int choice = 0;
 
         while (choice != 5) {
-            menu.showMessage("Bienvenue dans Wonderboys !");
-            menu.showMessage("1 - Créer un personnage");
+            menu.showMessage("PREPARATIFS");
+            menu.showMessage("\n1 - Créer un personnage");
             menu.showMessage("2 - Choisir un héros existant");
             menu.showMessage("3 - Modifier un personnage");
             menu.showMessage("4 - Démarrer la partie");
@@ -63,7 +64,7 @@ public class Game {
 
             //menu.showMessage("0 - Test monstres (nouveau !)");
 
-            choice = menu.askInt("Que veux-tu faire ?");
+            choice = menu.askInt("\nQue veux-tu faire ?");
 
             switch (choice) {
 
@@ -565,11 +566,20 @@ public class Game {
 
             Cell caseActuelle = board.getCell(newPosition - 1);
             if (caseActuelle instanceof EmptyCell) {
+
             } else if (caseActuelle instanceof EnemyCell) {
                 System.out.println("La case est occupée par un monstre !");
 
 
-            } else {
+            }
+
+        else if (caseActuelle instanceof FouilleCell) {
+            System.out.println("Tu trouves un trésor !");
+            // TODO : Ajouter effet (ex: + vie)
+            menu.askString("Appuie Entrée pour continuer...");
+        }
+
+        else {
                 System.out.println("La case est occupée (trésor ou piège).");
                 caseActuelle.interact(currentCharacter); // Active trésor/piège seulement si pas monstre
             }
