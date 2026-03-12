@@ -1,6 +1,6 @@
 package fr.campus.wonderboys.equipment;
 
-import fr.campus.wonderboys.characters.Character;  // ← AJOUTE ÇA
+import fr.campus.wonderboys.characters.heros.Character;  // ← AJOUTE ÇA
 
 public class Potion extends DefensiveEquipment {
 

@@ -1,6 +1,6 @@
-package fr.campus.wonderboys.game;
+package fr.campus.wonderboys.game.cells;
 
-import fr.campus.wonderboys.characters.Character;  // ← AJOUTE CET IMPORT
+import fr.campus.wonderboys.characters.heros.Character;  // ← AJOUTE CET IMPORT
 
 /**
  * Case contenant une arme à ramasser.

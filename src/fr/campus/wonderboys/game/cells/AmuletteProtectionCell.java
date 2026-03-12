@@ -1,8 +1,7 @@
-package fr.campus.wonderboys.cells;
+package fr.campus.wonderboys.game.cells;
 
-import fr.campus.wonderboys.characters.Character;
+import fr.campus.wonderboys.characters.heros.Character;
 import fr.campus.wonderboys.equipment.AmuletteProtection;
-import fr.campus.wonderboys.game.Cell;
 
 public class AmuletteProtectionCell extends Cell {
     private final AmuletteProtection amulette = new AmuletteProtection();

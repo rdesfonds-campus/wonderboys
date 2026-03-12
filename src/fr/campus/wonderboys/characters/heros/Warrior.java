@@ -1,6 +1,5 @@
 package fr.campus.wonderboys.characters.heros;
 
-import fr.campus.wonderboys.characters.Character;
 import fr.campus.wonderboys.equipment.OffensiveEquipment;
 import fr.campus.wonderboys.equipment.DefensiveEquipment;
 
@@ -9,6 +8,7 @@ import fr.campus.wonderboys.equipment.DefensiveEquipment;
  * Hérite de Character pour partager nom, vie, attaque et équipements.
  */
 public class Warrior extends Character {
+
 
     /**
      * Crée un nouveau Warrior avec ses équipements de départ.
@@ -22,7 +22,9 @@ public class Warrior extends Character {
      */
     public Warrior(String name, int lifeLevel, int attackLevel,
                    OffensiveEquipment weapon, DefensiveEquipment defense) {
+
         super("Warrior", name, lifeLevel, attackLevel, weapon, defense);
+
 
         // Valeurs par défaut pour le système de combat
         setSkill(10);          // Habileté de base du guerrier
@@ -31,8 +33,14 @@ public class Warrior extends Character {
         setThac0(19);     // Bon THAC0 pour guerrier
         setCa(5);         // CA moyenne (armure)
 
+
     }
 
+    private void statJob(String type){
+        if (type.equals("Paladin")){
+            setSkill(20);
+        }
+    }
     /**
      * Affiche les informations principales du guerrier.
      *

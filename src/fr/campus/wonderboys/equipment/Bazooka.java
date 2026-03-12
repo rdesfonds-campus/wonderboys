@@ -1,7 +1,5 @@
 package fr.campus.wonderboys.equipment;
 
-import fr.campus.wonderboys.characters.Character;
-
 public class Bazooka extends OffensiveEquipment {
 
     public Bazooka() {

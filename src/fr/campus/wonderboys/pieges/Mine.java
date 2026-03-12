@@ -1,7 +1,7 @@
 package fr.campus.wonderboys.pieges;
 
-import fr.campus.wonderboys.characters.Character;
-import fr.campus.wonderboys.game.Cell;
+import fr.campus.wonderboys.characters.heros.Character;
+import fr.campus.wonderboys.game.cells.Cell;
 
 public class Mine extends Cell {
 

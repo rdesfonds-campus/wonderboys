@@ -4,6 +4,8 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+
+import fr.campus.wonderboys.characters.heros.Character;
 import fr.campus.wonderboys.characters.heros.Warrior;
 import fr.campus.wonderboys.characters.heros.Wizard;
 import fr.campus.wonderboys.equipment.*;
@@ -38,7 +40,7 @@ public class HeroDAO {
             e.printStackTrace();
         }
     }
-    public void createHero(fr.campus.wonderboys.characters.Character hero) {
+    public void createHero(Character hero) {
         String sql = "INSERT INTO `Character` (" +
                 "Type, Name, LifePoints, Strength, OffensiveEquipment, DefensiveEquipment" +
                 ") VALUES (?, ?, ?, ?, ?, ?)";
@@ -61,7 +63,7 @@ public class HeroDAO {
             e.printStackTrace();
         }
     }
-    public void editHero(fr.campus.wonderboys.characters.Character hero) {
+    public void editHero(Character hero) {
         String sql = "UPDATE `Character` SET " +
                 "Type = ?, " +
                 "Name = ?, " +
@@ -94,7 +96,7 @@ public class HeroDAO {
             e.printStackTrace();
         }
     }
-    public fr.campus.wonderboys.characters.Character getHeroById(int id) {
+    public Character getHeroById(int id) {
         String sql = "SELECT * FROM `Character` WHERE Id = ?";
 
         try (Connection connection = DatabaseConnection.getConnection();

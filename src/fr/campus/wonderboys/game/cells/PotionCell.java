@@ -1,5 +1,5 @@
-package fr.campus.wonderboys.game;
-import fr.campus.wonderboys.characters.Character;
+package fr.campus.wonderboys.game.cells;
+import fr.campus.wonderboys.characters.heros.Character;
 
 /**
  * Case contenant une potion de soin.

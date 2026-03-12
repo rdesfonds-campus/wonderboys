@@ -1,6 +1,5 @@
 package fr.campus.wonderboys.characters.heros;
 
-import fr.campus.wonderboys.characters.Character;
 import fr.campus.wonderboys.equipment.OffensiveEquipment;
 import fr.campus.wonderboys.equipment.DefensiveEquipment;
 

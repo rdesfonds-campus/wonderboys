@@ -1,4 +1,4 @@
-package fr.campus.wonderboys.characters;
+package fr.campus.wonderboys.characters.heros;
 
 import fr.campus.wonderboys.equipment.FragmentPuissance;
 import fr.campus.wonderboys.equipment.OffensiveEquipment;

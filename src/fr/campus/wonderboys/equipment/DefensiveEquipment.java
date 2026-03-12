@@ -1,6 +1,6 @@
 package fr.campus.wonderboys.equipment;
 
-import fr.campus.wonderboys.characters.Character;
+import fr.campus.wonderboys.characters.heros.Character;
 
 public abstract class DefensiveEquipment {
 
