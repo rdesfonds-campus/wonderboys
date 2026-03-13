@@ -1,6 +1,5 @@
-package fr.campus.wonderboys.game;
-
-import fr.campus.wonderboys.characters.enemies.d4.Goblin;
+import fr.campus.wonderboys.game.Game;
+import fr.campus.wonderboys.game.Menu;
 
 /**
  * Classe principale du jeu Wonderboys.

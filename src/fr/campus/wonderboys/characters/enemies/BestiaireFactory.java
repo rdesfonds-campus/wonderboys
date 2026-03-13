@@ -1,35 +1,58 @@
 package fr.campus.wonderboys.characters.enemies;
-import fr.campus.wonderboys.characters.enemies.boss.Dragon;
-import fr.campus.wonderboys.characters.enemies.boss.Golem;
-import fr.campus.wonderboys.characters.enemies.boss.Sorcier;
-import fr.campus.wonderboys.characters.enemies.boss.Vampire;
-import fr.campus.wonderboys.characters.enemies.d4.Goblin;
-import fr.campus.wonderboys.characters.enemies.d6.Chevalier;
+
+import fr.campus.wonderboys.characters.enemies.boss.*;
+import fr.campus.wonderboys.characters.enemies.d4.*;
+import fr.campus.wonderboys.characters.enemies.d6.*;
 
 import java.util.Random;
 
 public class BestiaireFactory {
-    private static Random rand = new Random();
 
-    /**
-     * Crée monstre selon case (boss 60+).
-     */
-    public static Enemy creerMonstre(int caseNum) {
-        if (caseNum >= 60) {
-            // Boss 60-63
-            int choix = rand.nextInt(4);
-            switch(choix) {
-                case 0: return new Dragon();
-                case 1: return new Sorcier();  // À créer
-                case 2: return new Golem();
-                default: return new Vampire();
-            }
-        } else {
-            // Normal : 60% faible, 30% moyen, 10% rien?
-            int pourc = rand.nextInt(100);
-            if (pourc < 60) return new Goblin();
-            else if (pourc < 90) return new Chevalier();  // Moyen 1d6
-            else return null;  // Rien 10%
+    private static final Random rand = new Random();
+
+    public static Enemy creerMonstre(int positionCase) {
+
+        // Boss à la fin du donjon
+        if (positionCase >= 60) {
+
+            Enemy[] boss = {
+                    new Dragon(),
+                    new Sorcier(),
+                    new Golem(),
+                    new Vampire()
+            };
+
+            return boss[rand.nextInt(boss.length)];
         }
+
+        // Monstres normaux
+        int proba = rand.nextInt(100);
+
+        if (proba < 60) {
+
+            Enemy[] faibles = {
+                    new Goblin(),
+                    new Serpent(),
+                    new Champignon(),
+                    new ChauveSouris(),
+                    new Crabe(),
+                    new Singe()
+            };
+
+            return faibles[rand.nextInt(faibles.length)];
+
+        } else if (proba < 90) {
+
+            Enemy[] moyens = {
+                    new Chevalier(),
+                    new Squelette(),
+                    new Brigand()
+            };
+
+            return moyens[rand.nextInt(moyens.length)];
+
+        }
+
+        return null; // 10% de chance qu'il n'y ait aucun monstre
     }
 }
