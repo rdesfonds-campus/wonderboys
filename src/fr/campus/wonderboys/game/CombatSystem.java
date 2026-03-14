@@ -8,113 +8,141 @@ import java.util.Random;
 public class CombatSystem {
 
     private final Menu menu;
-    private final Random rand = new Random();
+    private final Random rand;
+    private final Dice d20;
 
     public CombatSystem(Menu menu) {
         this.menu = menu;
+        this.rand = new Random();
+        this.d20 = new Dice(20);
     }
 
     public void fight(Character hero, Enemy monster) {
 
-        menu.showMessage("Un " + monster.getName() + " apparaît !");
+        menu.showMessage("⚔️ Un " + monster.getName() + " apparaît !");
 
-        int choix;
+        boolean combatActif = true;
 
-        do {
+        while (combatActif) {
 
-            menu.showMessage("1 Attaquer");
-            menu.showMessage("2 Fuir");
-            menu.showMessage("3 Stats");
-            menu.showMessage("4 Quitter");
+            menu.showMessage("1 - Attaquer");
+            menu.showMessage("2 - Fuir");
+            menu.showMessage("3 - Stats");
+            menu.showMessage("4 - Quitter combat");
 
-            choix = menu.askInt("Choix : ");
+            int choix = menu.askInt("Choix : ");
 
-            if (choix == 3) {
-                menu.showMessage(hero.toString());
+            switch (choix) {
+
+                case 1:
+                    attaquer(hero, monster);
+                    break;
+
+                case 2:
+                    if (tenterFuite(hero, monster)) {
+                        combatActif = false;
+                    }
+                    break;
+
+                case 3:
+                    menu.showMessage(hero.toString());
+                    break;
+
+                case 4:
+                    menu.showMessage("Tu abandonnes le combat.");
+                    combatActif = false;
+                    break;
+
+                default:
+                    menu.showMessage("Choix invalide.");
             }
 
-            else if (choix == 1) {
+            if (monster.estMort()) {
 
-                Dice d20 = new Dice(20);
-                int jet = d20.roll();
-
-                if (jet == 1) {
-                    menu.showMessage("Échec critique !");
-                } else {
-
-                    int seuil = hero.getThac0() - monster.getCa();
-
-                    if (jet >= seuil || jet == 20) {
-
-                        int degats =
-                                rand.nextInt(1, 11)
-                                        + hero.getAttackLevel() / 2;
-
-                        if (jet == 20) {
-                            degats *= 2;
-                            menu.showMessage("CRITIQUE !");
-                        }
-
-                        monster.subirDegats(degats);
-
-                        menu.showMessage("Tu infliges " + degats);
-
-                        if (monster.estMort()) {
-
-                            hero.setScore(
-                                    hero.getScore()
-                                            + monster.getScoreValue()
-                            );
-
-                            menu.showMessage(monster.getName() + " vaincu !");
-                            break;
-                        }
-
-                    } else {
-                        menu.showMessage("Tu rates.");
-                    }
-                }
-
-                int degatsMonstre = monster.calculateDamage();
-
-                hero.setLifeLevel(
-                        hero.getLifeLevel() - degatsMonstre
+                hero.setScore(
+                        hero.getScore() + monster.getScoreValue()
                 );
 
-                menu.showMessage(monster.getName()
+                menu.showMessage("🏆 " + monster.getName() + " vaincu !");
+                combatActif = false;
+            }
+
+            if (hero.getLifeLevel() <= 0) {
+                menu.showMessage("💀 Tu es mort.");
+                combatActif = false;
+            }
+        }
+    }
+
+    private void attaquer(Character hero, Enemy monster) {
+
+        int jet = d20.roll();
+
+        if (jet == 1) {
+            menu.showMessage("❌ Échec critique !");
+            attaqueMonstre(hero, monster);
+            return;
+        }
+
+        int seuil = hero.getThac0() - monster.getCa();
+
+        if (jet >= seuil || jet == 20) {
+
+            int degats =
+                    rand.nextInt(10) + 1
+                            + hero.getAttackLevel() / 2;
+
+            if (jet == 20) {
+                degats *= 2;
+                menu.showMessage("🔥 CRITIQUE !");
+            }
+
+            monster.subirDegats(degats);
+
+            menu.showMessage("Tu infliges " + degats + " dégâts.");
+
+        } else {
+            menu.showMessage("Tu rates ton attaque.");
+        }
+
+        if (!monster.estMort()) {
+            attaqueMonstre(hero, monster);
+        }
+    }
+
+    private void attaqueMonstre(Character hero, Enemy monster) {
+
+        int degatsMonstre = monster.calculateDamage();
+
+        hero.setLifeLevel(
+                hero.getLifeLevel() - degatsMonstre
+        );
+
+        menu.showMessage(
+                monster.getName()
                         + " inflige "
                         + degatsMonstre
-                        + " dégâts");
+                        + " dégâts"
+        );
+    }
 
-                if (hero.getLifeLevel() <= 0) {
-                    menu.showMessage("Game Over");
-                    System.exit(0);
-                }
-            }
+    private boolean tenterFuite(Character hero, Enemy monster) {
 
-            else if (choix == 2) {
+        if (rand.nextDouble() < 0.5) {
+            menu.showMessage("🏃 Fuite réussie !");
+            return true;
+        }
 
-                if (rand.nextDouble() < 0.5) {
-                    menu.showMessage("Fuite réussie");
-                    break;
-                }
+        menu.showMessage("❌ Fuite ratée !");
 
-                menu.showMessage("Fuite ratée");
+        int degats = monster.calculateDamage();
 
-                int degats = monster.calculateDamage();
+        hero.setLifeLevel(
+                hero.getLifeLevel() - degats
+        );
 
-                hero.setLifeLevel(
-                        hero.getLifeLevel() - degats
-                );
+        menu.showMessage("Tu subis " + degats + " dégâts.");
 
-                menu.showMessage("Tu subis " + degats);
-
-                if (hero.getLifeLevel() <= 0) {
-                    menu.showMessage("Mort en fuyant");
-                    System.exit(0);
-                }
-            }
-
-        } while (choix != 4);
+        return hero.getLifeLevel() <= 0;
     }
 }

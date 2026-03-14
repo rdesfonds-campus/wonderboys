@@ -1,21 +1,31 @@
 package fr.campus.wonderboys.game;
 
 import fr.campus.wonderboys.characters.Character;
-import fr.campus.wonderboys.characters.enemies.*;  // Pour tous
-import fr.campus.wonderboys.characters.enemies.d4.*;
-import fr.campus.wonderboys.characters.enemies.d6.*;
-import fr.campus.wonderboys.characters.enemies.boss.*;
+import fr.campus.wonderboys.characters.enemies.BestiaireFactory;
+import fr.campus.wonderboys.characters.enemies.Enemy;
 
 public class EnemyCell extends Cell {
 
     @Override
     public void interact(Character hero) {
-        System.out.println("Un ennemi t'attaque !");
-        // Plus tard : combat
+
+        System.out.println("⚔️ Un ennemi apparaît !");
+
+        Enemy monster = BestiaireFactory.creerMonstre(hero.getBoardPosition());
+
+        if (monster == null) {
+            System.out.println("Erreur génération monstre.");
+            return;
+        }
+
+        Menu menu = new Menu();
+        CombatSystem combat = new CombatSystem(menu);
+
+        combat.fight(hero, monster);
     }
 
     @Override
-    public String toString() {  // ← AJOUTE ÇA
+    public String toString() {
         return "Case ennemi";
     }
 }

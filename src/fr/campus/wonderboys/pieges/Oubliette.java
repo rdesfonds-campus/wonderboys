@@ -3,18 +3,19 @@ package fr.campus.wonderboys.pieges;
 import fr.campus.wonderboys.characters.Character;
 import fr.campus.wonderboys.game.Cell;
 
-public class Oubliette extends Cell { // Hérite de Cell (abstraite)
+public class Oubliette extends Cell {
 
     @Override
     public void interact(Character hero) {
-        System.out.println("💀 OUBLIETTE ! Tu tombes et retournes à la case 1.");
-        hero.setBoardPosition(1);  // Remet à la case départ
-        // Pas de dégâts, tu gardes tes PV, score et objets !
+
+        System.out.println("💀 OUBLIETTE !");
+        System.out.println("Tu tombes dans un trou et retournes au départ.");
+
+        hero.setBoardPosition(1);
     }
 
     @Override
     public String toString() {
-        return "Oubliette (retour case 1)";
+        return "Oubliette (retour départ)";
     }
 }
-

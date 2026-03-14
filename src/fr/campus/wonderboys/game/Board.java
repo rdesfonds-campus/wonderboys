@@ -40,7 +40,7 @@ public class Board {
         cells.set(63, new EnemyCell()); // temporaire
 
         // Monstres commentés pour l'instant
-        // placerMonstres(30);
+        placerMonstres(30);
     }
 
     /**
@@ -95,7 +95,17 @@ public class Board {
         else if (rand < 0.95) return new LameVorpaleCell();
         else return new EtoileMarioCell();
     }
+    private void placerMonstres(int nombre) {
 
+        for (int i = 0; i < nombre; i++) {
+
+            int pos = (int)(Math.random() * 63) + 1;
+
+            if (!(cells.get(pos) instanceof EnemyCell)) {
+                cells.set(pos, new EnemyCell());
+            }
+        }
+    }
     /**
      * Récupère la Cell à l'index (0-based, safe).
      * @param index position sur plateau (1-64 → 0-63)

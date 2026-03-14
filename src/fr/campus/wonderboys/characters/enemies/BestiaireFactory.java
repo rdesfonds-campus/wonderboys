@@ -54,5 +54,7 @@ public class BestiaireFactory {
         }
 
         return null; // 10% de chance qu'il n'y ait aucun monstre
+
+
     }
 }

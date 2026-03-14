@@ -5,14 +5,20 @@ import fr.campus.wonderboys.game.Cell;
 
 public class NuagePoison extends Cell {
 
+    private static final int DAMAGE = 2;
+
     @Override
     public void interact(Character hero) {
-        System.out.println("☠️ PIÈGE POISON ! Tu tousses -2 PV");
-        System.out.println("(Dégâts 2 PV, à brancher plus tard)");
+
+        System.out.println("☠️ NUAGE DE POISON !");
+        hero.setLifeLevel(hero.getLifeLevel() - DAMAGE);
+
+        System.out.println("-" + DAMAGE + " PV");
+        System.out.println("PV restants : " + hero.getLifeLevel());
     }
 
     @Override
     public String toString() {
-        return "Nuage Poison (2 PV)";
+        return "Poison (-2 PV)";
     }
 }
