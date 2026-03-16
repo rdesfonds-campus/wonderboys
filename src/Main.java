@@ -10,8 +10,9 @@ public class Main {
 
         Game game = new Game(menu);
 
-        game.startGame();
+        game.start();
 
     }
 
 }
+

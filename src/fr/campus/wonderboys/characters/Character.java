@@ -5,126 +5,229 @@ import fr.campus.wonderboys.equipment.OffensiveEquipment;
 import fr.campus.wonderboys.equipment.DefensiveEquipment;
 
 /**
- * Personnage abstrait de base pour Wonderboy.
- * Toutes les classes Warrior/Wizard doivent en hériter.
+ * Classe abstraite représentant un personnage du jeu.
+ * Warrior et Wizard héritent de cette classe.
  */
 public abstract class Character {
 
-    // --- Attributs de base du personnage ---
-    private String type;              // Type de personnage : "Warrior" ou "Wizard"
-    private String name;              // Nom du personnage
-    private int lifeLevel;            // Points de vie actuels
-    private int attackLevel;          // Niveau d'attaque de base
-    private OffensiveEquipment weapon;   // Arme ou sort équipé
-    private DefensiveEquipment defense;  // Bouclier ou potion équipé
-    private int id;                   // Identifiant venant de la base de données
+    // --- Informations générales ---
+    private int id;
+    private String type;
+    private String name;
 
-    // --- Attributs pour le système de combat ---
-    private int skill;          // Habileté (sert aux jets d'attaque/défense)
-    private int armorModifier;  // Bonus d'armure / défense naturelle
+    // --- Statistiques ---
+    private int lifeLevel;
+    private int maxLifeLevel = 20;
+    private int attackLevel;
 
-    // --- Attribut pour le score du joueur ---
-    private int score;          // Score total du personnage
-    private int thac0;     // THAC0 pour système D&D (score pour toucher CA 0)
-    private int ca;        // Classe d'Armure (bas = dur à toucher)
+    // --- Combat ---
+    private int skill;
+    private int armorModifier;
+    private int thac0;
+    private int ca;
 
-    // --- Attribut pour la gestion des PV max ---
-    private int maxLifeLevel = 20; // Points de vie maximum (par défaut)
-    //--- Attribut de la position du personnage ---
+    // --- Score ---
+    private int score = 0;
 
+    // --- Équipement ---
+    private OffensiveEquipment weapon;
+    private DefensiveEquipment defense;
+
+    // --- Position sur le plateau ---
     private int boardPosition = 1;
 
-    public int getBoardPosition() {
-        return boardPosition;
-    }
-
-    public void setBoardPosition(int boardPosition) {
-        this.boardPosition = boardPosition;
-    }
-
     /**
-     * Constructeur principal du personnage.
-     *
-     * @param type        type du personnage ("Warrior" ou "Wizard")
-     * @param name        nom du personnage
-     * @param lifeLevel   points de vie de départ
-     * @param attackLevel niveau d'attaque de départ
-     * @param weapon      arme ou sort équipé
-     * @param defense     bouclier ou potion équipée
+     * Constructeur principal
      */
-    public Character(String type, String name, int lifeLevel, int attackLevel,
-                     OffensiveEquipment weapon, DefensiveEquipment defense) {
+    public Character(String type,
+                     String name,
+                     int lifeLevel,
+                     int attackLevel,
+                     OffensiveEquipment weapon,
+                     DefensiveEquipment defense) {
+
         this.type = type;
         this.name = name;
         this.lifeLevel = lifeLevel;
         this.attackLevel = attackLevel;
         this.weapon = weapon;
         this.defense = defense;
-        // skill, armorModifier et score seront initialisés dans Warrior/Wizard
     }
 
-    // --- Getters (accès en lecture) ---
-    public String getType() { return type; }
-    public String getName() { return name; }
-    public int getLifeLevel() { return lifeLevel; }
-    public int getAttackLevel() { return attackLevel; }
-    public OffensiveEquipment getWeapon() { return weapon; }
-    public DefensiveEquipment getDefense() { return defense; }
-    public int getId() { return id; }
+    // -------------------------
+    // GETTERS
+    // -------------------------
 
-    public int getSkill() { return skill; }
-    public int getArmorModifier() { return armorModifier; }
-    public int getScore() { return score; }
+    public int getId() {
+        return id;
+    }
 
-    public int getMaxLifeLevel() { return maxLifeLevel; }
+    public String getType() {
+        return type;
+    }
 
-    // --- Setters (accès en écriture / modification) ---
-    public void setType(String type) { this.type = type; }
-    public void setName(String name) { this.name = name; }
-    public void setLifeLevel(int lifeLevel) { this.lifeLevel = lifeLevel; }
-    public void setAttackLevel(int attackLevel) { this.attackLevel = attackLevel; }
-    public void setWeapon(OffensiveEquipment weapon) { this.weapon = weapon; }
-    public void setDefense(DefensiveEquipment defense) { this.defense = defense; }
-    public void setId(int id) { this.id = id; }
+    public String getName() {
+        return name;
+    }
 
-    public void setSkill(int skill) { this.skill = skill; }
-    public void setArmorModifier(int armorModifier) { this.armorModifier = armorModifier; }
-    public void setScore(int score) { this.score = score; }
-    public int getThac0() { return thac0; }
-    public void setThac0(int thac0) { this.thac0 = thac0; }
-    public int getCa() { return ca; }
-    public void setCa(int ca) { this.ca = ca; }
+    public int getLifeLevel() {
+        return lifeLevel;
+    }
 
-    public void setMaxLifeLevel(int max) { this.maxLifeLevel = max; }
+    public int getMaxLifeLevel() {
+        return maxLifeLevel;
+    }
 
-    //public void setPosition(int position) { this.position = position;}
+    public int getAttackLevel() {
+        return attackLevel;
+    }
+
+    public int getSkill() {
+        return skill;
+    }
+
+    public int getArmorModifier() {
+        return armorModifier;
+    }
+
+    public int getThac0() {
+        return thac0;
+    }
+
+    public int getCa() {
+        return ca;
+    }
+
+    public int getScore() {
+        return score;
+    }
+
+    public OffensiveEquipment getWeapon() {
+        return weapon;
+    }
+
+    public DefensiveEquipment getDefense() {
+        return defense;
+    }
+
+    public int getBoardPosition() {
+        return boardPosition;
+    }
+
+    // -------------------------
+    // SETTERS
+    // -------------------------
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setLifeLevel(int lifeLevel) {
+        this.lifeLevel = lifeLevel;
+    }
+
+    public void setMaxLifeLevel(int maxLifeLevel) {
+        this.maxLifeLevel = maxLifeLevel;
+    }
+
+    public void setAttackLevel(int attackLevel) {
+        this.attackLevel = attackLevel;
+    }
+
+    public void setSkill(int skill) {
+        this.skill = skill;
+    }
+
+    public void setArmorModifier(int armorModifier) {
+        this.armorModifier = armorModifier;
+    }
+
+    public void setThac0(int thac0) {
+        this.thac0 = thac0;
+    }
+
+    public void setCa(int ca) {
+        this.ca = ca;
+    }
+
+    public void setScore(int score) {
+        this.score = score;
+    }
+
+    public void setWeapon(OffensiveEquipment weapon) {
+        this.weapon = weapon;
+    }
+
+    public void setDefense(DefensiveEquipment defense) {
+        this.defense = defense;
+    }
+
+    public void setBoardPosition(int boardPosition) {
+        this.boardPosition = boardPosition;
+    }
+
+    // -------------------------
+    // MÉTHODES GAMEPLAY
+    // -------------------------
+
+    public void gainScore(int points) {
+        score += points;
+    }
+
+    public void takeDamage(int damage) {
+        lifeLevel -= damage;
+
+        if (lifeLevel < 0) {
+            lifeLevel = 0;
+        }
+    }
+
+    public void heal(int points) {
+        lifeLevel += points;
+
+        if (lifeLevel > maxLifeLevel) {
+            lifeLevel = maxLifeLevel;
+        }
+    }
+
     /**
-     * Méthode spéciale pour gérer un fragment de puissance.
-     * TODO : implémenter réellement cet effet si besoin.
+     * Effet spécial pour fragment de puissance
+     * (à implémenter plus tard si nécessaire)
      */
     public void setOffensiveEquipment(FragmentPuissance fragmentPuissance) {
-        // Pour l'instant vide
+        // TODO implémentation future
     }
 
-    // --- Représentation texte pour le debug / affichage ---
+    // -------------------------
+    // AFFICHAGE
+    // -------------------------
+
     @Override
     public String toString() {
+
         String weaponName = (weapon != null) ? weapon.getName() : "aucune arme";
         String defenseName = (defense != null) ? defense.getName() : "aucune défense";
 
-        return "Character{" +
-                "type='" + type + '\'' +
-                ", name='" + name + '\'' +
-                ", lifeLevel=" + lifeLevel +
-                ", attackLevel=" + attackLevel +
-                ", weapon='" + weaponName + '\'' +
-                ", defense='" + defenseName + '\'' +
-                ", skill=" + skill +
-                ", armorModifier=" + armorModifier +
-                ", score=" + score +
-                ", thac0=" + thac0 +
-                ", ca=" + ca +
-                '}';
+        return
+                "\n--- HERO ---" +
+                        "\nNom : " + name +
+                        "\nClasse : " + type +
+                        "\nPV : " + lifeLevel + "/" + maxLifeLevel +
+                        "\nAttaque : " + attackLevel +
+                        "\nSkill : " + skill +
+                        "\nArmure : " + ca +
+                        "\nArme : " + weaponName +
+                        "\nDéfense : " + defenseName +
+                        "\nScore : " + score +
+                        "\nPosition : " + boardPosition +
+                        "\n";
     }
-
 }

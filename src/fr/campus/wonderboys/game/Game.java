@@ -1,65 +1,120 @@
 package fr.campus.wonderboys.game;
 
+import fr.campus.wonderboys.characters.*;
 import fr.campus.wonderboys.characters.Character;
-import fr.campus.wonderboys.characters.heros.HeroFactory;
+import fr.campus.wonderboys.characters.heros.Warrior;
+import fr.campus.wonderboys.characters.heros.Wizard;
 import fr.campus.wonderboys.db.HeroDAO;
+import fr.campus.wonderboys.game.Cell;
+
+import java.util.List;
 
 public class Game {
 
     private final Menu menu;
     private Character currentCharacter;
 
+    private HeroDAO heroDAO = new HeroDAO();
+
     public Game(Menu menu) {
         this.menu = menu;
     }
 
-    public void startGame() {
+    public void start() {
+        showMainMenu();
+    }
 
-        Board board = new Board();
-        Dice dice = new Dice();
+    private void showMainMenu() {
 
-        // Création du héros
-        HeroFactory heroFactory = new HeroFactory();
+        int choice = 0;
+
+        while (choice != 3) {
+
+            menu.showMessage("\n=== WONDERBOYS ===");
+            menu.showMessage("1 - Créer un héros");
+            menu.showMessage("2 - Charger un héros");
+            menu.showMessage("3 - Quitter");
+
+            choice = menu.askInt("Choix : ");
+
+            switch (choice) {
+
+                case 1 -> createCharacter();
+
+                case 2 -> chooseExistingHero();
+
+                case 3 -> menu.showMessage("Au revoir aventurier !");
+            }
+        }
+    }
+
+    public void createCharacter() {
 
         String name = menu.askString("Nom du héros :");
 
-        menu.showMessage("Choisir classe :");
-        menu.showMessage("1 - Guerrier");
-        menu.showMessage("2 - Mage");
+        int type = menu.askInt("1 - Warrior\n2 - Wizard");
 
-        int type = menu.askInt("Votre choix :");
+        if (type == 1) {
+            currentCharacter = new Warrior(name);
+        } else {
+            currentCharacter = new Wizard(name);
+        }
 
-        currentCharacter = heroFactory.createHero(type, name);
+        HeroDAO dao = new HeroDAO();
+        dao.saveCharacter(currentCharacter);
+
+        menu.showMessage("Héros créé !");
+    }
+
+    public void chooseExistingHero() {
+
+        List<Character> heroes = heroDAO.getAllHeroes();
+
+        if (heroes.isEmpty()) {
+            menu.showMessage("Aucun héros enregistré.");
+            return;
+        }
+
+        menu.showMessage("\n--- Héros disponibles ---");
+
+        for (int i = 0; i < heroes.size(); i++) {
+            menu.showMessage((i + 1) + " - " + heroes.get(i).getName());
+        }
+
+        int choice = menu.askInt("Choix : ");
+
+        currentCharacter = heroes.get(choice - 1);
+
+        menu.showMessage("Héros chargé : " + currentCharacter.getName());
+
+        startGame();
+    }
+
+    public void startGame() {
 
         currentCharacter.setBoardPosition(1);
 
-        menu.showMessage("Début de l'aventure !");
-        menu.showMessage(currentCharacter.getName() + " entre dans le donjon.");
-
+        Dice dice = new Dice();
+        Board board = new Board();
         while (true) {
 
             int roll = dice.roll();
-            String cmd = menu.askString("Entrée pour avancer ou 'status'");
-
-            if(cmd.equalsIgnoreCase("status")){
-                menu.showMessage(currentCharacter.toString());
-            }
-            menu.showMessage("🎲 Dé : " + roll);
 
             int newPosition = currentCharacter.getBoardPosition() + roll;
 
-            if (newPosition == board.getTotalSquares()) {
+            menu.showMessage("Dé : " + roll);
 
-                menu.showMessage("🏆 Tu tombes pile sur la salle du trésor !");
-                currentCharacter.setScore(currentCharacter.getScore() + 1000);
+            if (newPosition >= 64) {
 
-                break;
-            }
+                menu.showMessage("🏆 Salle du trésor !");
+                currentCharacter.gainScore(1000);
 
-            if (newPosition > board.getTotalSquares()) {
+                menu.showMessage("Score final : " + currentCharacter.getScore());
 
-                menu.showMessage("Tu dépasses la salle du trésor...");
-                menu.showMessage("Le trésor se referme sous tes yeux.");
+                heroDAO.changeLifePointsCharacter(
+                        currentCharacter.getId(),
+                        currentCharacter.getLifeLevel()
+                );
 
                 break;
             }
@@ -68,32 +123,27 @@ public class Game {
 
             menu.showMessage("Position : " + newPosition);
 
-            Cell cell = board.getCell(newPosition);
-
-            menu.showMessage(cell.toString());
-
+            Cell cell = board.getCell(newPosition - 1);
             cell.interact(currentCharacter);
 
-            if (currentCharacter.getLifeLevel() <= 0) {
-                menu.showMessage("💀 Tu es mort.");
-                break;
+            menu.askString("Entrée pour continuer...");
+        }
+    }public Character getCurrentCharacter() {
+        return currentCharacter;
+    }
 
-            }
+    public void editExistingHero() {
 
-            menu.askString("Appuie sur Entrée pour continuer...");
+        if (currentCharacter == null) {
+            menu.showMessage("Aucun héros sélectionné.");
+            return;
         }
 
-        HeroDAO dao = new HeroDAO();
+        menu.showMessage("Modification du héros : " + currentCharacter.getName());
 
-        dao.changeLifePointsCharacter(
-                currentCharacter.getId(),
-                currentCharacter.getLifeLevel()
-        );
+        String newName = menu.askString("Nouveau nom : ");
+        currentCharacter.setName(newName);
+
+        menu.showMessage("Nom mis à jour !");
     }
-
-    public void start() {
-        startGame();
-    }
-
-
 }

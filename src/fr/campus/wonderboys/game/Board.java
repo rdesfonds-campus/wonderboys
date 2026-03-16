@@ -48,16 +48,27 @@ public class Board {
      * @param nombre nombre de pièges à placer
      */
     private void placerPiges(int nombre) {
-        for (int i = 0; i < nombre; i++) {
-            int pos = (int)(Math.random() * 64);
-            Cell piege;
-            if (oubliettesCount < 1 && Math.random() < 0.3) { // 30% chance si <1
-                piege = new Oubliette();
-                oubliettesCount++;
-            } else {
-                piege = piegeAleatoireNonOubliette();
+
+        int placed = 0;
+
+        while (placed < nombre) {
+
+            int pos = (int)(Math.random() * 63) + 1;
+
+            if (cells.get(pos) instanceof EmptyCell) {
+
+                Cell piege;
+
+                if (oubliettesCount < 1 && Math.random() < 0.3) {
+                    piege = new Oubliette();
+                    oubliettesCount++;
+                } else {
+                    piege = piegeAleatoireNonOubliette();
+                }
+
+                cells.set(pos, piege);
+                placed++;
             }
-            cells.set(pos, piege);
         }
     }
 
@@ -97,12 +108,16 @@ public class Board {
     }
     private void placerMonstres(int nombre) {
 
-        for (int i = 0; i < nombre; i++) {
+        int placed = 0;
+
+        while (placed < nombre) {
 
             int pos = (int)(Math.random() * 63) + 1;
 
-            if (!(cells.get(pos) instanceof EnemyCell)) {
+            if (cells.get(pos) instanceof EmptyCell) {
+
                 cells.set(pos, new EnemyCell());
+                placed++;
             }
         }
     }

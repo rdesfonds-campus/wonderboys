@@ -1,171 +1,92 @@
 package fr.campus.wonderboys.db;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import fr.campus.wonderboys.characters.Character;
 import fr.campus.wonderboys.characters.heros.Warrior;
 import fr.campus.wonderboys.characters.heros.Wizard;
-import fr.campus.wonderboys.equipment.*;
+
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class HeroDAO {
 
-    public void getHeroes() {
-        // Ici on écrira la requête SELECT * FROM Character
-        try (Connection connection = DatabaseConnection.getConnection();
-             Statement statement = connection.createStatement();
-             ResultSet resultSet = statement.executeQuery("SELECT * FROM `Character`")) {
+    public void saveCharacter(Character hero) {
 
-            while (resultSet.next()) {
-                int id = resultSet.getInt("Id");
-                String type = resultSet.getString("Type");
-                String name = resultSet.getString("Name");
-                int lifePoints = resultSet.getInt("LifePoints");
-                int strength = resultSet.getInt("Strength");
-                String offensive = resultSet.getString("OffensiveEquipment");
-                String defensive = resultSet.getString("DefensiveEquipment");
-
-                System.out.println("[" + id + "] "
-                        + type + " " + name
-                        + " | LifePoints=" + lifePoints
-                        + " | Strength=" + strength
-                        + " | Off=" + offensive
-                        + " | Def=" + defensive);
-            }
-
-        } catch (SQLException e) {
-            System.out.println("Erreur lors de la récupération des héros :");
-            e.printStackTrace();
-        }
-    }
-    public void createHero(fr.campus.wonderboys.characters.Character hero) {
-        String sql = "INSERT INTO `Character` (" +
-                "Type, Name, LifePoints, Strength, OffensiveEquipment, DefensiveEquipment" +
-                ") VALUES (?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO `character` (Type, Name, LifePoints, Strength) VALUES (?, ?, ?, ?)";
 
         try (Connection connection = DatabaseConnection.getConnection();
-             java.sql.PreparedStatement statement = connection.prepareStatement(sql)) {
+             PreparedStatement statement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
             statement.setString(1, hero.getType());
             statement.setString(2, hero.getName());
             statement.setInt(3, hero.getLifeLevel());
             statement.setInt(4, hero.getAttackLevel());
-            statement.setString(5, hero.getWeapon() != null ? hero.getWeapon().getName() : null);
-            statement.setString(6, hero.getDefense() != null ? hero.getDefense().getName() : null);
 
             statement.executeUpdate();
-            System.out.println("Héros enregistré en base : " + hero.getName());
 
-        } catch (SQLException e) {
-            System.out.println("Erreur lors de l'enregistrement du héros :");
-            e.printStackTrace();
-        }
-    }
-    public void editHero(fr.campus.wonderboys.characters.Character hero) {
-        String sql = "UPDATE `Character` SET " +
-                "Type = ?, " +
-                "Name = ?, " +
-                "LifePoints = ?, " +
-                "Strength = ?, " +
-                "OffensiveEquipment = ?, " +
-                "DefensiveEquipment = ? " +
-                "WHERE Id = ?";
-
-        try (Connection connection = DatabaseConnection.getConnection();
-             java.sql.PreparedStatement statement = connection.prepareStatement(sql)) {
-
-            statement.setString(1, hero.getType());
-            statement.setString(2, hero.getName());
-            statement.setInt(3, hero.getLifeLevel());
-            statement.setInt(4, hero.getAttackLevel());
-            statement.setString(5, hero.getWeapon() != null ? hero.getWeapon().getName() : null);
-            statement.setString(6, hero.getDefense() != null ? hero.getDefense().getName() : null);
-            statement.setInt(7, hero.getId());
-
-            int rows = statement.executeUpdate();
-            if (rows > 0) {
-                System.out.println("Héros mis à jour en base : " + hero.getName());
-            } else {
-                System.out.println("Aucun héros mis à jour (Id inconnu : " + hero.getId() + ")");
+            ResultSet keys = statement.getGeneratedKeys();
+            if (keys.next()) {
+                hero.setId(keys.getInt(1));
             }
 
         } catch (SQLException e) {
-            System.out.println("Erreur lors de la modification du héros :");
             e.printStackTrace();
         }
     }
-    public fr.campus.wonderboys.characters.Character getHeroById(int id) {
-        String sql = "SELECT * FROM `Character` WHERE Id = ?";
+
+    public List<Character> getAllHeroes() {
+
+        List<Character> heroes = new ArrayList<>();
+
+        String sql = "SELECT * FROM `character`";
 
         try (Connection connection = DatabaseConnection.getConnection();
-             java.sql.PreparedStatement statement = connection.prepareStatement(sql)) {
+             PreparedStatement statement = connection.prepareStatement(sql);
+             ResultSet rs = statement.executeQuery()) {
 
-            statement.setInt(1, id);
+            while (rs.next()) {
 
-            try (ResultSet resultSet = statement.executeQuery()) {
-                if (resultSet.next()) {
-                    String type = resultSet.getString("Type");
-                    String name = resultSet.getString("Name");
-                    int lifePoints = resultSet.getInt("LifePoints");
-                    int strength = resultSet.getInt("Strength");
-                    String offensive = resultSet.getString("OffensiveEquipment");
-                    String defensive = resultSet.getString("DefensiveEquipment");
+                String type = rs.getString("Type");
+                String name = rs.getString("Name");
+                int life = rs.getInt("LifePoints");
+                int strength = rs.getInt("Strength");
 
-                    OffensiveEquipment weapon = null;
-                    DefensiveEquipment defense = null;
+                Character hero;
 
-                    if (offensive != null) {
-                        weapon = new Weapon(strength, offensive);
-                    }
-                    if (defensive != null) {
-                        defense = new Shield();
-                    }
-
-                    if ("Warrior".equalsIgnoreCase(type)) {
-                        Warrior warrior = new Warrior(name, lifePoints, strength, weapon, defense);
-                        warrior.setId(id);
-                        return warrior;
-                    } else if ("Wizard".equalsIgnoreCase(type)) {
-                        Wizard wizard = new Wizard(name, lifePoints, strength, weapon, defense);
-                        wizard.setId(id);
-                        return wizard;
-                    }
+                if (type.equals("Warrior")) {
+                    hero = new Warrior(name);
+                } else {
+                    hero = new Wizard(name);
                 }
+
+                hero.setId(rs.getInt("Id"));
+                hero.setLifeLevel(life);
+                hero.setAttackLevel(strength);
+
+                heroes.add(hero);
             }
 
         } catch (SQLException e) {
-            System.out.println("Erreur lors de la récupération du héros par Id :");
             e.printStackTrace();
         }
 
-        return null;
+        return heroes;
     }
-    /**
-     * Met à jour les points de vie d'un héros en base.
-     */
-    public void changeLifePointsCharacter(int id, int newLifePoints) {
-        String sql = "UPDATE `Character` SET LifePoints = ? WHERE Id = ?";
+
+    public void changeLifePointsCharacter(int id, int lifePoints) {
+
+        String sql = "UPDATE `character` SET LifePoints=? WHERE Id=?";
 
         try (Connection connection = DatabaseConnection.getConnection();
-             java.sql.PreparedStatement statement = connection.prepareStatement(sql)) {
+             PreparedStatement statement = connection.prepareStatement(sql)) {
 
-            statement.setInt(1, newLifePoints);
+            statement.setInt(1, lifePoints);
             statement.setInt(2, id);
 
-            int rows = statement.executeUpdate();
-            if (rows > 0) {
-                System.out.println("Points de vie mis à jour pour le héros Id " + id +
-                        " : " + newLifePoints);
-            } else {
-                System.out.println("Aucun héros trouvé pour l'Id " + id);
-            }
+            statement.executeUpdate();
 
         } catch (SQLException e) {
-            System.out.println("Erreur lors de la mise à jour des points de vie :");
             e.printStackTrace();
         }
     }
-
-
-
 }
