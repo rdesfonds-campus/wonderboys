@@ -9,5 +9,7 @@ public class Dragon extends Enemy {
         super("Dragon", "Dragon", 20, 8,
                 new OffensiveEquipment("Weapon", 8, "Souffle de feu"),
                 new DefensiveEquipment("Shield", 6, "Écailles"));
+        setScoreValue(50);
+
     }
 }

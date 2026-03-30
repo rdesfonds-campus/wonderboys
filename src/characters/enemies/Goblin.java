@@ -9,5 +9,7 @@ public class Goblin extends Enemy {
         super("Goblin", "Gobelin", 4, 2,
                 new OffensiveEquipment("Weapon", 2, "Couteau rouillé"),
                 new DefensiveEquipment("Shield", 1, "Peau de bête"));
+
+        setScoreValue(10);
     }
 }

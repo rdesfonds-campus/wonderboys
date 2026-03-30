@@ -48,11 +48,13 @@ public class Game {
             }
         }
     }
+
     private void creerPersonnage() {
         currentCharacter = heroFactory.creerPersonnage();
         menu.showMessage("Personnage créé !");
         menu.showMessage(currentCharacter.toString());
     }
+
     private void choisirPersonnage() {
         db.PersonnageDAO dao = new db.PersonnageDAO();
         menu.showMessage("Personnages disponibles :");
@@ -85,6 +87,9 @@ public class Game {
             if (nouvellePosition >= plateau.getTotalCases()) {
                 menu.showMessage("Tu arrives à la case 64 - Salle du trésor !");
                 menu.showMessage("VICTOIRE ! Bien joué " + currentCharacter.getName() + " !");
+                menu.showMessage("Score final : " + currentCharacter.getScore());
+                db.PersonnageDAO dao = new db.PersonnageDAO();
+                dao.mettreAJour(currentCharacter);
                 break;
             }
 
@@ -95,11 +100,13 @@ public class Game {
             menu.showMessage("Tu es sur : " + caseActuelle);
             caseActuelle.interact(currentCharacter);
 
-            // Gestion du résultat de combat
             if (caseActuelle instanceof EnemyCell) {
                 CombatResult resultat = ((EnemyCell) caseActuelle).getDernierResultat();
                 if (resultat.getIssue() == CombatResult.Issue.DEFAITE) {
                     menu.showMessage("Partie terminée. Retour au menu principal.");
+                    menu.showMessage("Score final : " + currentCharacter.getScore());
+                    db.PersonnageDAO dao = new db.PersonnageDAO();
+                    dao.mettreAJour(currentCharacter);
                     currentCharacter = null;
                     return;
                 } else if (resultat.getIssue() == CombatResult.Issue.FUITE) {
@@ -110,6 +117,9 @@ public class Game {
 
             if (currentCharacter != null && currentCharacter.getLifeLevel() <= 0) {
                 menu.showMessage("Partie terminée. Retour au menu principal.");
+                menu.showMessage("Score final : " + currentCharacter.getScore());
+                db.PersonnageDAO dao = new db.PersonnageDAO();
+                dao.mettreAJour(currentCharacter);
                 currentCharacter = null;
                 return;
             }

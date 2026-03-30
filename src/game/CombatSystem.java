@@ -50,6 +50,8 @@ public class CombatSystem {
 
             if (ennemi.getLifeLevel() <= 0) {
                 menu.showMessage("Tu as vaincu le " + ennemi.getName() + " !");
+                hero.setScore(hero.getScore() + ennemi.getScoreValue());
+                menu.showMessage("Tu gagnes " + ennemi.getScoreValue() + " points ! Score : " + hero.getScore());
                 return new CombatResult(CombatResult.Issue.VICTOIRE, 0);
             }
 

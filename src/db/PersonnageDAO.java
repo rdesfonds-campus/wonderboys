@@ -33,6 +33,24 @@ public class PersonnageDAO {
         }
     }
 
+    public void mettreAJour(characters.Character perso) {
+        String sql = "UPDATE personnage SET lifeLevel = ?, attackLevel = ? WHERE id = ?";
+
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, perso.getLifeLevel());
+            stmt.setInt(2, perso.getAttackLevel());
+            stmt.setInt(3, perso.getId());
+
+            stmt.executeUpdate();
+            System.out.println("Personnage mis à jour en base !");
+
+        } catch (SQLException e) {
+            System.out.println("Erreur mise à jour : " + e.getMessage());
+        }
+    }
+
     // Récupère tous les personnages
     public void afficherTous() {
         String sql = "SELECT * FROM personnage";

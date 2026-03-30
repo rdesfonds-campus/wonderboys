@@ -9,5 +9,6 @@ public class Orc extends Enemy {
         super("Orc", "Orc", 8, 4,
                 new OffensiveEquipment("Weapon", 4, "Massue"),
                 new DefensiveEquipment("Shield", 2, "Armure de cuir"));
+        setScoreValue(25);
     }
 }
