@@ -1,15 +1,16 @@
 package game;
 
-import characters.enemies.Goblin;
-import characters.enemies.Orc;
 import characters.enemies.Dragon;
 import characters.enemies.Enemy;
+import characters.enemies.Goblin;
+import characters.enemies.Orc;
 
 public class EnemyCell extends Cell {
 
     private Enemy ennemi;
 
-    public EnemyCell() {
+    public EnemyCell(Menu menu) {
+        super(menu);
         int tirage = (int)(Math.random() * 3);
         switch (tirage) {
             case 0:  this.ennemi = new Goblin(); break;
@@ -20,7 +21,7 @@ public class EnemyCell extends Cell {
 
     @Override
     public void interact(characters.Character hero) {
-        CombatSystem combat = new CombatSystem(new Menu());
+        CombatSystem combat = new CombatSystem(menu);
         combat.combattre(hero, ennemi);
     }
 

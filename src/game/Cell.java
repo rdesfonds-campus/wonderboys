@@ -1,13 +1,15 @@
 package game;
 
-import characters.Character;
-
 public abstract class Cell {
 
-    // Ce que fait la case quand le joueur arrive dessus
+    protected Menu menu;
+
+    public Cell(Menu menu) {
+        this.menu = menu;
+    }
+
     public abstract void interact(characters.Character hero);
 
-    // Description de la case
     @Override
     public abstract String toString();
 }

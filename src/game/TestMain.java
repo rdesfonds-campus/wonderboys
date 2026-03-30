@@ -13,7 +13,7 @@ public class TestMain {
 
         // Test Board
         System.out.println("\n=== TEST PLATEAU ===");
-        Board plateau = new Board();
+        Board plateau = new Board(new Menu());
         System.out.println(plateau);
         System.out.println("Case 1 : " + plateau.getCase(1));
         System.out.println("Case 2 : " + plateau.getCase(2));

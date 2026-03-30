@@ -2,9 +2,13 @@ package game;
 
 public class EmptyCell extends Cell {
 
+    public EmptyCell(Menu menu) {
+        super(menu);
+    }
+
     @Override
     public void interact(characters.Character hero) {
-        System.out.println("Case vide. Tu continues ta route.");
+        menu.showMessage("Case vide. Tu continues ta route.");
     }
 
     @Override
