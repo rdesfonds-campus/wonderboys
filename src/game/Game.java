@@ -76,8 +76,9 @@ public class Game {
         menu.showMessage("\n--- Début de la partie ! ---");
         menu.showMessage(currentCharacter.getName() + " entre dans le donjon.");
 
-        while (position < plateau.getTotalCases()) {
+        while (true) {
             String cmd = menu.askString("Entrée pour lancer le dé | 'status' pour voir ton statut...");
+
             if (cmd.equalsIgnoreCase("status")) {
                 menu.showMessage("=== STATUT ===");
                 menu.showMessage(currentCharacter.toString());
@@ -85,50 +86,72 @@ public class Game {
                 menu.showMessage("Case : " + position + " / 64");
                 continue;
             }
+
             int lancer = de.roll();
             int nouvellePosition = position + lancer;
 
             menu.showMessage("Tu lances le dé : " + lancer);
 
-            if (nouvellePosition >= plateau.getTotalCases()) {
-                menu.showMessage("Tu arrives à la case 64 - Salle du trésor !");
-                menu.showMessage("VICTOIRE ! Bien joué " + currentCharacter.getName() + " !");
-                menu.showMessage("Score final : " + currentCharacter.getScore());
-                db.PersonnageDAO dao = new db.PersonnageDAO();
-                dao.mettreAJour(currentCharacter);
-                break;
-            }
+            try {
+                if (nouvellePosition > plateau.getTotalCases()) {
+                    throw new OutOfBoardException("Tu es allé trop vite et tu as raté le trésor, dommage !");
+                }
 
-            position = nouvellePosition;
-            menu.showMessage("Tu avances à la case " + position + " / " + plateau.getTotalCases());
-
-            Cell caseActuelle = plateau.getCase(position);
-            menu.showMessage("Tu es sur : " + caseActuelle);
-            caseActuelle.interact(currentCharacter);
-
-            if (caseActuelle instanceof EnemyCell) {
-                CombatResult resultat = ((EnemyCell) caseActuelle).getDernierResultat();
-                if (resultat.getIssue() == CombatResult.Issue.DEFAITE) {
-                    menu.showMessage("Partie terminée. Retour au menu principal.");
+                if (nouvellePosition == plateau.getTotalCases()) {
+                    currentCharacter.setScore(currentCharacter.getScore() + 1000);
+                    menu.showMessage("Tu tombes pile sur la case 64 - Salle du trésor !");
+                    menu.showMessage("BRAVO ! Tu as trouvé le trésor ! +1000 points !");
                     menu.showMessage("Score final : " + currentCharacter.getScore());
                     db.PersonnageDAO dao = new db.PersonnageDAO();
                     dao.mettreAJour(currentCharacter);
+                    finDePartie();
+                    return;
+                }
+
+                position = nouvellePosition;
+                menu.showMessage("Tu avances à la case " + position + " / " + plateau.getTotalCases());
+
+                Cell caseActuelle = plateau.getCase(position);
+                menu.showMessage("Tu es sur : " + caseActuelle);
+                caseActuelle.interact(currentCharacter);
+
+                if (caseActuelle instanceof EnemyCell) {
+                    CombatResult resultat = ((EnemyCell) caseActuelle).getDernierResultat();
+                    if (resultat.getIssue() == CombatResult.Issue.DEFAITE) {
+                        menu.showMessage("Score final : " + currentCharacter.getScore());
+                        db.PersonnageDAO dao = new db.PersonnageDAO();
+                        dao.mettreAJour(currentCharacter);
+                        finDePartie();
+                        currentCharacter = null;
+                        return;
+                    } else if (resultat.getIssue() == CombatResult.Issue.FUITE) {
+                        position = Math.max(1, position - resultat.getReculFuite());
+                        menu.showMessage("Tu recules à la case " + position + ".");
+                    }
+                }
+
+                if (currentCharacter != null && currentCharacter.getLifeLevel() <= 0) {
+                    menu.showMessage("Score final : " + currentCharacter.getScore());
+                    db.PersonnageDAO dao = new db.PersonnageDAO();
+                    dao.mettreAJour(currentCharacter);
+                    finDePartie();
                     currentCharacter = null;
                     return;
-                } else if (resultat.getIssue() == CombatResult.Issue.FUITE) {
-                    position = Math.max(1, position - resultat.getReculFuite());
-                    menu.showMessage("Tu recules à la case " + position + ".");
                 }
-            }
 
-            if (currentCharacter != null && currentCharacter.getLifeLevel() <= 0) {
-                menu.showMessage("Partie terminée. Retour au menu principal.");
+            } catch (OutOfBoardException e) {
+                menu.showMessage(e.getMessage());
                 menu.showMessage("Score final : " + currentCharacter.getScore());
                 db.PersonnageDAO dao = new db.PersonnageDAO();
                 dao.mettreAJour(currentCharacter);
-                currentCharacter = null;
+                finDePartie();
                 return;
             }
         }
+    }
+
+    private void finDePartie() {
+        menu.showMessage("\nMerci d'avoir joué à Wonderboys !");
+        menu.showMessage("Retour au menu principal...");
     }
 }

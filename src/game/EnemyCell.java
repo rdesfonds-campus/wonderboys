@@ -10,13 +10,20 @@ public class EnemyCell extends Cell {
     private Enemy ennemi;
     private CombatResult dernierResultat;
 
-    public EnemyCell(Menu menu) {
+    public EnemyCell(Menu menu, int position) {
         super(menu);
-        int tirage = (int)(Math.random() * 3);
-        switch (tirage) {
-            case 0:  this.ennemi = new Goblin(); break;
-            case 1:  this.ennemi = new Orc();    break;
-            default: this.ennemi = new Dragon(); break;
+
+        if (position >= 59) {
+            // Les 6 dernières cases : uniquement le Dragon
+            this.ennemi = new Dragon();
+        } else {
+            // Le reste du plateau : Goblin ou Orc
+            int tirage = (int)(Math.random() * 2);
+            if (tirage == 0) {
+                this.ennemi = new Goblin();
+            } else {
+                this.ennemi = new Orc();
+            }
         }
     }
 
