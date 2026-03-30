@@ -22,11 +22,18 @@ public class HeroFactory {
 
         String nom = menu.askString("Quel est le nom de ton personnage ?");
 
+        characters.Character perso;
         if (type == 1) {
-            return creerWarrior(nom);
+            perso = creerWarrior(nom);
         } else {
-            return creerWizard(nom);
+            perso = creerWizard(nom);
         }
+
+        // Maintenant perso existe, on peut le sauvegarder
+        db.PersonnageDAO dao = new db.PersonnageDAO();
+        dao.sauvegarder(perso);
+
+        return perso;
     }
 
     private characters.Character creerWarrior(String nom) {
