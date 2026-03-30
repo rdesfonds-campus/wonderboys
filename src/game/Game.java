@@ -77,8 +77,14 @@ public class Game {
         menu.showMessage(currentCharacter.getName() + " entre dans le donjon.");
 
         while (position < plateau.getTotalCases()) {
-            menu.askString("Appuie sur Entrée pour lancer le dé...");
-
+            String cmd = menu.askString("Entrée pour lancer le dé | 'status' pour voir ton statut...");
+            if (cmd.equalsIgnoreCase("status")) {
+                menu.showMessage("=== STATUT ===");
+                menu.showMessage(currentCharacter.toString());
+                menu.showMessage("Score : " + currentCharacter.getScore());
+                menu.showMessage("Case : " + position + " / 64");
+                continue;
+            }
             int lancer = de.roll();
             int nouvellePosition = position + lancer;
 
