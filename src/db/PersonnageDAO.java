@@ -138,5 +138,57 @@ public class PersonnageDAO {
         }
 
         return null;
+
+    }
+    /**
+     * Modifie le nom d'un personnage existant en base.
+     *
+     * @param id      identifiant du personnage à modifier
+     * @param nouveauNom nouveau nom à enregistrer
+     */
+    public void modifier(int id, String nouveauNom) {
+        String sql = "UPDATE personnage SET name = ? WHERE id = ?";
+
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setString(1, nouveauNom);
+            stmt.setInt(2, id);
+
+            int rows = stmt.executeUpdate();
+            if (rows > 0) {
+                System.out.println("Personnage modifié !");
+            } else {
+                System.out.println("Aucun personnage trouvé avec l'id " + id);
+            }
+
+        } catch (SQLException e) {
+            System.out.println("Erreur modification : " + e.getMessage());
+        }
+    }
+
+    /**
+     * Supprime un personnage de la base de données.
+     *
+     * @param id identifiant du personnage à supprimer
+     */
+    public void supprimer(int id) {
+        String sql = "DELETE FROM personnage WHERE id = ?";
+
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, id);
+
+            int rows = stmt.executeUpdate();
+            if (rows > 0) {
+                System.out.println("Personnage supprimé !");
+            } else {
+                System.out.println("Aucun personnage trouvé avec l'id " + id);
+            }
+
+        } catch (SQLException e) {
+            System.out.println("Erreur suppression : " + e.getMessage());
+        }
     }
 }

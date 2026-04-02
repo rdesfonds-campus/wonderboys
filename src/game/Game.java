@@ -56,24 +56,28 @@ public class Game {
         menu.showMessage("=========================");
 
         int choix = 0;
-        while (choix != 4) {
+        while (choix != 6) {
             menu.showMessage("1 - Créer un personnage");
             menu.showMessage("2 - Choisir un personnage existant");
-            menu.showMessage("3 - Jouer");
-            menu.showMessage("4 - Quitter");
+            menu.showMessage("3 - Modifier un personnage");
+            menu.showMessage("4 - Supprimer un personnage");
+            menu.showMessage("5 - Jouer");
+            menu.showMessage("6 - Quitter");
             choix = menu.askInt("Ton choix :");
 
             switch (choix) {
-                case 1: creerPersonnage();   break;
-                case 2: choisirPersonnage(); break;
-                case 3:
+                case 1: creerPersonnage();    break;
+                case 2: choisirPersonnage();  break;
+                case 3: modifierPersonnage(); break;
+                case 4: supprimerPersonnage(); break;
+                case 5:
                     if (currentCharacter == null) {
                         menu.showMessage("Crée ou choisis d'abord un personnage !");
                     } else {
                         jouer();
                     }
                     break;
-                case 4: menu.showMessage("Au revoir !"); break;
+                case 6: menu.showMessage("Au revoir !"); break;
                 default: menu.showMessage("Choix invalide."); break;
             }
         }
@@ -88,7 +92,35 @@ public class Game {
         menu.showMessage("Personnage créé !");
         menu.showMessage(currentCharacter.toString());
     }
+    /**
+     * Affiche la liste des personnages et permet au joueur
+     * de modifier le nom de l'un d'eux.
+     */
+    private void modifierPersonnage() {
+        db.PersonnageDAO dao = new db.PersonnageDAO();
+        menu.showMessage("Personnages disponibles :");
+        dao.afficherTous();
+        int id = menu.askInt("Quel id veux-tu modifier ?");
+        String nouveauNom = menu.askString("Nouveau nom :");
+        dao.modifier(id, nouveauNom);
+    }
 
+    /**
+     * Affiche la liste des personnages et permet au joueur
+     * d'en supprimer un par son identifiant.
+     * Remet le personnage courant à null s'il est supprimé.
+     */
+    private void supprimerPersonnage() {
+        db.PersonnageDAO dao = new db.PersonnageDAO();
+        menu.showMessage("Personnages disponibles :");
+        dao.afficherTous();
+        int id = menu.askInt("Quel id veux-tu supprimer ?");
+        dao.supprimer(id);
+        if (currentCharacter != null && currentCharacter.getId() == id) {
+            menu.showMessage("Le personnage actif a été supprimé.");
+            currentCharacter = null;
+        }
+    }
     /**
      * Affiche la liste des personnages en base et permet au joueur
      * d'en sélectionner un par son identifiant.
